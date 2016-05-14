@@ -114,7 +114,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/css/" style="font-size: 10px;">css</a>
+						<a href="/tags/android/" style="font-size: 20px;">android</a> <a href="/tags/css/" style="font-size: 10px;">css</a> <a href="/tags/javascript/" style="font-size: 15px;">javascript</a>
 					</div>
 				</section>
 				
@@ -188,11 +188,11 @@
 
       <div class="body-wrap">
   
-    <article id="post-快速理解javascript中的this" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Android多线程界面更新方法的总结" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/05/14/快速理解javascript中的this/" class="article-date">
-  	<time datetime="2016-05-14T07:41:11.000Z" itemprop="datePublished">2016-05-14</time>
+      <a href="/2016/05/14/Android多线程界面更新方法的总结/" class="article-date">
+  	<time datetime="2016-05-14T08:26:48.000Z" itemprop="datePublished">2016-05-14</time>
 </a>
     </div>
   
@@ -205,7 +205,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/05/14/快速理解javascript中的this/">快速理解javascript中的this</a>
+      <a class="article-title" href="/2016/05/14/Android多线程界面更新方法的总结/">Android多线程界面更新方法的总结</a>
     </h1>
   
 
@@ -214,28 +214,1210 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><img src="http://7xpt6z.com1.z0.glb.clouddn.com/%E5%BF%AB%E9%80%9F%E7%90%86%E8%A7%A3javascript%E4%B8%AD%E7%9A%84this.png" alt="javascript中的this.png"></p>
-<h2 id="u4E00_u4E9B_u8BEF_u89E3"><a href="#u4E00_u4E9B_u8BEF_u89E3" class="headerlink" title="一些误解"></a>一些误解</h2><ol>
-<li>指向自身？（<em>并不是所有时候都指向自身</em>）</li>
-<li>作用域问题?（<em>this并不一定指向函数的作用域，并且在任何时候都不指向函数的词法作用域</em>）</li>
-<li>this到底是什么？（<em>this是运行时绑定的并不是在编写时绑定，他的上下文取决于函数调用时的各种条件和函数声明的位置没有任何关系，只取决于函数的调用方式</em>）</li>
-</ol>
-<h2 id="this_u7684_u6307_u5411"><a href="#this_u7684_u6307_u5411" class="headerlink" title="this的指向"></a>this的指向</h2><ol>
-<li>全局范围使用this和全局函数调用都指向全局对象(在严格模式下undefined)</li>
-<li>方法调用内this指向调用对象</li>
-<li>new绑定调用构造函数，在函数内部指向新创建的对象</li>
-<li>通过call、apply显式的的设置this对象，指向设置的对象</li>
-</ol>
-<h2 id="u5173_u4E8Ecall_u3001apply_u3001bind"><a href="#u5173_u4E8Ecall_u3001apply_u3001bind" class="headerlink" title="关于call、apply、bind"></a>关于call、apply、bind</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var links = document.querySelectorAll(&#39;nav li&#39;);&#10;&#10;for (var i = 0; i &#60; links.length; i++) &#123;&#10;&#10;console.log(this); // [object Window]&#125;</span><br></pre></td></tr></table></figure>
-<p>有时候我们需要根据实际的需求来变化代码的作用域，就需要<br>call、apply、bind动态的传入函数引用。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var links = document.querySelectorAll(&#39;nav li&#39;);&#10;&#10;for (var i = 0; i &#60; links.length; i++) &#123;&#10;&#10;(function () &#123;&#10;&#10;console.log(this);&#10;&#10;&#125;).call(links[i]);&#10;&#125;</span><br></pre></td></tr></table></figure>
-<p>其中.call(scope, arg1, arg2, arg3)输入单个参数，而.apply(scope, [arg1, arg2])输入数组作为参数。在ES5中引入了bind方法，bind()并不触发函数，它仅仅是在函数触发前绑定值。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nav.addEventListener(&#39;click&#39;, toggleNav.bind(scope, arg1, arg2), false);</span><br></pre></td></tr></table></figure>
-<p>在不需要调用的时候就可以传递参数，函数并没被触发，scope可以被改变，且参数在等着传递。</p>
-<h2 id="u5176_u5B83"><a href="#u5176_u5B83" class="headerlink" title="其它"></a>其它</h2><p>bind源码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">if(!(&#39;bind&#39; in Function.prototype))&#123;&#10;&#160;&#160;&#160;&#160;Function.prototype.bind = function()&#123;&#10;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;var fn = this, &#10;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;context = arguments[0], &#10;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;args = Array.prototype.slice.call(arguments, 1);&#10;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;return function()&#123;&#10;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;return fn.apply(context, args.concat(arguments));&#10;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#125;&#10;&#160;&#160;&#160;&#160;&#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
-<p>bind()方法通常被用在上下文丢失的场景下，例如面向对象和事件处理。之所以要这么做，是因为节点的addEventListener方法总是为事件处理器所绑定的节点的上下文中执行回调函数，这就是它应该表现的那样。但是，如果你想要使用高级的面向对象技术，或需要你的回调函数成为某个方法的实例，你将需要手动调整上下文。这就是bind方法所带来的便利之处。<br>bind源码中调用了Array的slice方法，我们知道arguments对象并不是一个真正的数组，而是一个类数组对象，虽然具有length属性，并且值也能够被索引，但是它们不支持原生的数组方法，例如slice和push。但是，由于它们具有和数组类似的行为，数组的方法能够被调用和劫持，因此我们可以通过类似于上面代码的方式达到这个目的，其核心是利用call方法。</p>
+        <p>#Android多线程界面更新的方法总结</p>
+<p><strong>Android多线程与界面交互的方法</strong></p>
+<ul>
+<li>Activity.runOnUiThread(Runnable)</li>
+<li>View.post(Runnable),View.postDelay(Runnable,long)</li>
+<li>Handler</li>
+<li>AsyncTask</li>
+</ul>
+<h2 id="u4E00_u3001runOnUiThread_u7684_u7528_u6CD5"><a href="#u4E00_u3001runOnUiThread_u7684_u7528_u6CD5" class="headerlink" title="一、runOnUiThread的用法"></a>一、runOnUiThread的用法</h2><p>runOnUiThread是Activity的内部方法，使用时最好指定当前的环境变量（Context）。</p>
+<pre><code>new Thread(new Runnable() {
 
+        @Override
+        public void run() {
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    Toast.makeText(mainActivity.this,&quot;UI操作。。。&quot;,0).show();
+                }
+            });
+
+        }
+    }).start();
+</code></pre><p>执行runOnUiThread这个方法会调用父类中的</p>
+<pre><code>public final void runOnUiThread(Runnable action){
+  if(Thread.currentThread()!=mUiThread){
+  mHandler.post(action);
+  }else{
+   action.run();
+  }
+} 
+</code></pre><h2 id="u4E8C_u3001_u65B0_u7EBF_u7A0B_u4E2DView_u76F4_u63A5_u5728UI_u7EBF_u7A0B_u4E2D_u66F4_u65B0_u7684_u65B9_u6CD5"><a href="#u4E8C_u3001_u65B0_u7EBF_u7A0B_u4E2DView_u76F4_u63A5_u5728UI_u7EBF_u7A0B_u4E2D_u66F4_u65B0_u7684_u65B9_u6CD5" class="headerlink" title="二、新线程中View直接在UI线程中更新的方法"></a>二、新线程中View直接在UI线程中更新的方法</h2><pre><code>textView.postDelayed(new Runnable() {
+
+        @Override
+        public void run() {
+            textView.setText(&quot;Test View.post(Runnable)&quot;);
+
+        }
+    }, 1000);
+</code></pre><p>-</p>
+<pre><code>textView.post(new Runnable() {
+
+       @Override
+       public void run() {
+           textView.setText(&quot;Test View.postDelay(Runnable，long)&quot;);
+
+       }
+   });
+</code></pre><h2 id="u4E09_u3001Handler_28_u6D88_u606F_u4F20_u9012_u673A_u5236_29_u4F7F_u7528"><a href="#u4E09_u3001Handler_28_u6D88_u606F_u4F20_u9012_u673A_u5236_29_u4F7F_u7528" class="headerlink" title="三、Handler(消息传递机制)使用"></a>三、Handler(消息传递机制)使用</h2><pre><code>Handler myHandler = new Handler(){
+  public void handleMessage(Message msg){
+   super.handleMessage(msg); 
+    }
+};
+</code></pre><p>也可以继承handler</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyHandler</span> <span class="keyword">extends</span> <span class="title">handler</span></span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="title">MyHandler</span><span class="params">()</span></span>&#123;</span><br><span class="line">      </span><br><span class="line">  &#125;</span><br><span class="line"> <span class="annotation">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleMessage</span><span class="params">(Message msg)</span></span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.handleMessage(msg);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>分发Message或者Runnable对象到handler所在的线程中一般handler在主线程中。</strong></p>
+<p>handler中一些分发消息的方法：</p>
+<ul>
+<li>post（Runnable）</li>
+<li>postAtTime(Runnable,long)</li>
+<li>postDelay(Runnable,long)</li>
+<li>sendEmptyMessage(int what)</li>
+<li>sendMessage(Message)</li>
+<li>senMessageAtTime(Message，long)</li>
+<li>sendMessageDelayed(Message,long)</li>
+</ul>
+<p><em>post方式添加一个实现Runnable接口的匿名对象到消息对列中，在目标收到消息后就可以以回调的方式在自己的线程中执行</em></p>
+<p><strong>Message对象所具有的属性：</strong></p>
+<hr>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">arg1</td>
+<td style="text-align:center">int</td>
+<td>用来存放整型数据</td>
+</tr>
+<tr>
+<td style="text-align:center">arg2</td>
+<td style="text-align:center">int</td>
+<td>用来存放整型数据</td>
+</tr>
+<tr>
+<td style="text-align:center">obj</td>
+<td style="text-align:center">Object</td>
+<td>用来存放发送给接收器的Object任意对象</td>
+</tr>
+<tr>
+<td style="text-align:center">replyTo</td>
+<td style="text-align:center">Messager</td>
+<td>用来指定此Message发送到何处的可选Message对象</td>
+</tr>
+<tr>
+<td style="text-align:center">what</td>
+<td style="text-align:center">int</td>
+<td>用于指定用户自定义的消息代码这样接受者就可以了解这个消息的信息</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Message message = Message.obtain();</span><br><span class="line">message.arg1 = <span class="number">1</span>;</span><br><span class="line">message.arg2 = <span class="number">2</span>;</span><br><span class="line">message.obj = <span class="string">"Demo"</span>;</span><br><span class="line">message.what = <span class="number">3</span>;</span><br><span class="line">Bundle bundle = <span class="keyword">new</span> Bundle();</span><br><span class="line">bundle.putString( <span class="string">"name"</span>,<span class="string">"Lucy"</span>);</span><br><span class="line">message.setData(bundle);</span><br></pre></td></tr></table></figure>
+<p><strong>下面贴上一段示例代码（开启新线程实现电子广告牌）</strong></p>
+<hr>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> ImageView iv;</span><br><span class="line">	<span class="keyword">private</span> TextView tv;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> Handler handler;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span>[] path = <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;R.drawable.img01,R.drawable.img02,R.drawable.img03,R.drawable.img04,</span><br><span class="line">			R.drawable.img05,R.drawable.img06&#125;;</span><br><span class="line">	<span class="keyword">private</span> String[] title = <span class="keyword">new</span> String[]&#123;<span class="string">"编程词典系列"</span>,<span class="string">"高效开发"</span>,<span class="string">"快乐分享"</span>,<span class="string">"用户人群"</span>,<span class="string">"快速学习"</span>,<span class="string">"全方位查询"</span>&#125;;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> index =<span class="number">0</span>;</span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">		setContentView(R.layout.activity_main);</span><br><span class="line">		iv = (ImageView) findViewById(R.id.imageView1);</span><br><span class="line">		tv = (TextView) findViewById(R.id.textView1);</span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">		Thread t = <span class="keyword">new</span> Thread(<span class="keyword">this</span>);</span><br><span class="line">		t.start();</span><br><span class="line">		handler = <span class="keyword">new</span> Handler()&#123;</span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleMessage</span><span class="params">(Message msg)</span></span>&#123;</span><br><span class="line">				<span class="keyword">if</span> (msg.what ==<span class="number">1</span>) &#123;</span><br><span class="line">					tv.setText(msg.getData().getString(<span class="string">"title"</span>));</span><br><span class="line">					iv.setImageResource(path[msg.arg1]);</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">super</span>.handleMessage(msg);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;;</span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">while</span>(!Thread.currentThread().isInterrupted())&#123;</span><br><span class="line">		    index = <span class="keyword">new</span> Random().nextInt(path.length);</span><br><span class="line">			Message m = handler.obtainMessage();</span><br><span class="line">			m.arg1 = index;</span><br><span class="line">			Bundle bundle = <span class="keyword">new</span> Bundle();</span><br><span class="line">			m.what = <span class="number">1</span>;</span><br><span class="line">			bundle.putString(<span class="string">"title"</span>, title[index]);</span><br><span class="line">			m.setData(bundle);</span><br><span class="line">			handler.sendMessage(m);</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				Thread.sleep(<span class="number">2000</span>);</span><br><span class="line">			&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">				<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;			</span><br><span class="line">		&#125;		</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="u56DB_u3001AsyncTask_u5F02_u6B65_u4EFB_u52A1_u7684_u7528_u6CD5"><a href="#u56DB_u3001AsyncTask_u5F02_u6B65_u4EFB_u52A1_u7684_u7528_u6CD5" class="headerlink" title="四、AsyncTask异步任务的用法"></a>四、AsyncTask异步任务的用法</h2><blockquote>
+<p>AsyncTask实际上是一个线程池，在代码上比handler要轻量级但是实际上要比Handler要耗资源，Handler仅仅发送了一个消息队列，连线程池对没有开。</p>
+</blockquote>
+<ol>
+<li>onPreExecute()，（可选方法）最新用户调用excute时的接口，任务执行之前调用该方法，可以在这里显示进度对话框。</li>
+<li>doInBackground(Params…),后台执行比较好使的操作，不能直接操纵UI。在该方法中使用publishProgress（progress…）来更新任务的进度。</li>
+<li>onProgressUpdate(Progress…),在主线程中执行，显示进度条</li>
+<li>onPostExecute(Result),此方法可以从doinbackground得到的结果来操作UI，在主线程中执行，执行的结果作为参数返回。</li>
+<li>onCancelled(Object)调用此方法可以随时取消操作。</li>
+</ol>
+<blockquote>
+<p>AsyncTask定义的三种泛型</p>
+<p>params: 启动任务执行的输入参数，如：http请求的URL</p>
+<p>progress:后台任务执行的百分比</p>
+<p>result:返回结果，如：String、list集合等</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">MyTask</span> <span class="keyword">extends</span> <span class="title">AsyncTask</span>&lt;<span class="title">params</span>, <span class="title">progress</span>, <span class="title">result</span>&gt; </span>&#123; ... &#125;</span><br></pre></td></tr></table></figure>
+<p>示例代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">DownloadFilesTask</span> <span class="keyword">extends</span> <span class="title">AsyncTask</span>&lt;<span class="title">URL</span>, <span class="title">Integer</span>, <span class="title">Long</span>&gt; </span>&#123;</span><br><span class="line"> <span class="function"><span class="keyword">protected</span> Long <span class="title">doInBackground</span><span class="params">(URL... urls)</span> </span>&#123;</span><br><span class="line">     <span class="keyword">int</span> count = urls.length;</span><br><span class="line">     <span class="keyword">long</span> totalSize = <span class="number">0</span>;</span><br><span class="line">     <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; count; i++) &#123;</span><br><span class="line">         totalSize += Downloader.downloadFile(urls[i]);</span><br><span class="line">         publishProgress((<span class="keyword">int</span>) ((i / (<span class="keyword">float</span>) count) * <span class="number">100</span>));</span><br><span class="line">         <span class="comment">// Escape early if cancel() is called</span></span><br><span class="line">         <span class="keyword">if</span> (isCancelled()) <span class="keyword">break</span>;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">return</span> totalSize;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onProgressUpdate</span><span class="params">(Integer... progress)</span> </span>&#123;</span><br><span class="line">     setProgressPercent(progress[<span class="number">0</span>]);</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPostExecute</span><span class="params">(Long result)</span> </span>&#123;</span><br><span class="line">     showDialog(<span class="string">"Downloaded "</span> + result + <span class="string">" bytes"</span>);</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>获取网络图片的示例代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">ActionBarActivity</span> </span>&#123;</span><br><span class="line"><span class="keyword">private</span> ImageView iv;</span><br><span class="line"><span class="keyword">private</span> Button bt;</span><br><span class="line"><span class="keyword">private</span> String imagePath = <span class="string">"http://192.168.1.1/sa"</span>;</span><br><span class="line"><span class="keyword">private</span> ProgressDialog dialog;</span><br><span class="line"></span><br><span class="line">   <span class="annotation">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">       setContentView(R.layout.activity_main);</span><br><span class="line">       iv = (ImageView) findViewById(R.id.imageView1);</span><br><span class="line">       bt = (Button) findViewById(R.id.button1);</span><br><span class="line">       dialog = <span class="keyword">new</span> ProgressDialog(<span class="keyword">this</span>);</span><br><span class="line">       dialog.setTitle(<span class="string">"提示信息："</span>);</span><br><span class="line">       dialog.setMessage(<span class="string">"正在下载。。。"</span>);</span><br><span class="line">       bt.setOnClickListener(<span class="keyword">new</span> OnClickListener() &#123;</span><br><span class="line">		</span><br><span class="line">		<span class="annotation">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</span><br><span class="line">			<span class="keyword">new</span> MyTask().execute(imagePath);</span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyTask</span> <span class="keyword">extends</span> <span class="title">AsyncTask</span>&lt;<span class="title">String</span>, <span class="title">Void</span>, <span class="title">Bitmap</span>&gt;</span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> Bitmap <span class="title">doInBackground</span><span class="params">(String... params)</span> </span>&#123;</span><br><span class="line">		HttpClient httpClient = <span class="keyword">new</span> DefaultHttpClient();</span><br><span class="line">		HttpGet httpGet = <span class="keyword">new</span> HttpGet(params[<span class="number">0</span>]);</span><br><span class="line">		Bitmap bitmap = <span class="keyword">null</span>;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			HttpResponse httpResponse = httpClient.execute(httpGet);</span><br><span class="line">			<span class="keyword">if</span> (httpResponse.getStatusLine().getStatusCode()==<span class="number">200</span>) &#123;</span><br><span class="line">				HttpEntity httpEntity = httpResponse.getEntity();</span><br><span class="line">				<span class="keyword">byte</span>[] data = EntityUtils.toByteArray(httpEntity);</span><br><span class="line">				bitmap= BitmapFactory.decodeByteArray(data, <span class="number">0</span>, data.length);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> bitmap;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPreExecute</span><span class="params">()</span> </span>&#123;			</span><br><span class="line">		<span class="keyword">super</span>.onPreExecute();</span><br><span class="line">		dialog.show();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPostExecute</span><span class="params">(Bitmap result)</span> </span>&#123;			</span><br><span class="line">		<span class="keyword">super</span>.onPostExecute(result);</span><br><span class="line">		iv.setImageBitmap(result);</span><br><span class="line">		dialog.dismiss();</span><br><span class="line">	&#125;    	</span><br><span class="line">     &#125;   </span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Android自定义组合控件的实现" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/14/Android自定义组合控件的实现/" class="article-date">
+  	<time datetime="2016-05-14T08:25:13.000Z" itemprop="datePublished">2016-05-14</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/05/14/Android自定义组合控件的实现/">Android自定义组合控件的实现</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="u4E00_u3001_u5B9A_u4E49_u4E00_u4E2AXML_u5E03_u5C40_u6587_u4EF6"><a href="#u4E00_u3001_u5B9A_u4E49_u4E00_u4E2AXML_u5E03_u5C40_u6587_u4EF6" class="headerlink" title="一、定义一个XML布局文件"></a>一、定义一个XML布局文件</h2><p>   <em>setting_item_view.xml</em></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&#62;&#10;&#60;RelativeLayout xmlns:android=&#34;http://schemas.android.com/apk/res/android&#34;&#10;    android:layout_width=&#34;fill_parent&#34;&#10;    android:layout_height=&#34;60dip&#34; &#62;&#10;&#10;    &#60;TextView&#10;        android:id=&#34;@+id/tv_title&#34;&#10;        android:layout_width=&#34;wrap_content&#34;&#10;        android:layout_height=&#34;wrap_content&#34;&#10;        android:layout_alignParentLeft=&#34;true&#34;&#10;        android:layout_marginLeft=&#34;5dip&#34;&#10;        android:layout_marginTop=&#34;5dip&#34;   &#10;        android:textColor=&#34;#000000&#34;&#10;        android:textSize=&#34;20dip&#34; /&#62;&#10;    &#10;    &#60;TextView&#10;        android:id=&#34;@+id/tv_desc&#34;&#10;        android:layout_width=&#34;wrap_content&#34;&#10;        android:layout_height=&#34;wrap_content&#34;&#10;        android:layout_below=&#34;@+id/tv_title&#34;&#10;        android:layout_marginLeft=&#34;5dip&#34;&#10;        android:layout_marginBottom=&#34;5dip&#34;       &#10;        android:textColor=&#34;#99000000&#34;&#10;        android:textSize=&#34;18dip&#34; /&#62;&#10;&#10;    &#60;CheckBox&#10;        android:clickable=&#34;false&#34;&#10;        android:focusable=&#34;false&#34;&#10;        android:id=&#34;@+id/cb_status&#34;&#10;        android:layout_width=&#34;wrap_content&#34;&#10;        android:layout_height=&#34;wrap_content&#34;&#10;        android:layout_alignParentRight=&#34;true&#34;&#10;        android:layout_centerVertical=&#34;true&#34;&#10;        android:layout_marginRight=&#34;20dip&#34; /&#62;&#10;&#10;    &#60;View&#10;        android:layout_width=&#34;fill_parent&#34;&#10;        android:layout_height=&#34;0.2dip&#34;&#10;        android:layout_alignParentBottom=&#34;true&#34;&#10;        android:layout_alignParentLeft=&#34;true&#34;&#10;        android:layout_marginLeft=&#34;5dip&#34;&#10;        android:layout_marginRight=&#34;5dip&#34;&#10;        android:background=&#34;#000000&#34; /&#62;&#10;&#10;&#60;/RelativeLayout&#62;</span><br></pre></td></tr></table></figure>
+<h2 id="u4E8C_u3001_u5728src/values/attrs-xml_u4E2D_u5B9A_u4E49_u5C5E_u6027"><a href="#u4E8C_u3001_u5728src/values/attrs-xml_u4E2D_u5B9A_u4E49_u5C5E_u6027" class="headerlink" title="二、在src/values/attrs.xml中定义属性"></a>二、在src/values/attrs.xml中定义属性</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&#62;&#10;&#60;resources&#62;&#10;    &#60;declare-styleable name=&#34;TextView&#34;&#62;&#10;        &#60;attr name=&#34;title&#34; format=&#34;string&#34; /&#62;&#10;        &#60;attr name=&#34;desc_on&#34; format=&#34;string&#34; /&#62;&#10;        &#60;attr name=&#34;desc_off&#34; format=&#34;string&#34; /&#62;&#10;    &#60;/declare-styleable&#62;&#10;    &#10;&#60;/resources&#62;</span><br></pre></td></tr></table></figure>
+<h2 id="u4E09_u3001_u81EA_u5B9A_u4E49_u4E00_u4E2Aview_u7EE7_u627F_u81EA_u4F60_u9700_u8981_u7684_u5E03_u5C40"><a href="#u4E09_u3001_u81EA_u5B9A_u4E49_u4E00_u4E2Aview_u7EE7_u627F_u81EA_u4F60_u9700_u8981_u7684_u5E03_u5C40" class="headerlink" title="三、自定义一个view继承自你需要的布局"></a>三、自定义一个view继承自你需要的布局</h2><blockquote>
+<p><strong>iniview(Context context)初始化自定义的布局文件</strong></p>
+<p><strong>根据需求自定义一些API方法</strong></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SettingItemView</span> <span class="keyword">extends</span> <span class="title">RelativeLayout</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> CheckBox cb_status;</span><br><span class="line">	<span class="keyword">private</span> TextView tv_title;</span><br><span class="line">	<span class="keyword">private</span> TextView tv_desc;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> String title;</span><br><span class="line">	<span class="keyword">private</span> String desc_on;</span><br><span class="line">	<span class="keyword">private</span> String desc_off;</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">iniview</span><span class="params">(Context context)</span></span>&#123;</span><br><span class="line">		View.inflate(context, R.layout.setting_item_view, <span class="keyword">this</span>);</span><br><span class="line">		cb_status = (CheckBox)findViewById(R.id.cb_status);</span><br><span class="line">		tv_title = (TextView)findViewById(R.id.tv_title);</span><br><span class="line">		tv_desc = (TextView)findViewById(R.id.tv_desc);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">SettingItemView</span><span class="params">(Context context, AttributeSet attrs, <span class="keyword">int</span> defStyle)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>(context, attrs, defStyle);</span><br><span class="line">		iniview(context);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">SettingItemView</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>(context, attrs);</span><br><span class="line">		iniview(context);</span><br><span class="line">		title = attrs.getAttributeValue(<span class="string">"http://schemas.android.com/apk/res/com.victor.mobilesafe"</span>,<span class="string">"title"</span>);</span><br><span class="line">	    desc_on = attrs.getAttributeValue(<span class="string">"http://schemas.android.com/apk/res/com.victor.mobilesafe"</span>,<span class="string">"desc_on"</span>);</span><br><span class="line">		desc_off = attrs.getAttributeValue(<span class="string">"http://schemas.android.com/apk/res/com.victor.mobilesafe"</span>,<span class="string">"desc_off"</span>);</span><br><span class="line">		tv_title.setText(title);</span><br><span class="line">		setDesc(desc_off);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">SettingItemView</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>(context);</span><br><span class="line">		iniview(context);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isChecked</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> cb_status.isChecked();</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span>  <span class="keyword">void</span> <span class="title">setChecked</span><span class="params">(<span class="keyword">boolean</span> checked)</span></span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (checked) &#123;</span><br><span class="line">			setDesc(desc_on);</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			setDesc(desc_off);</span><br><span class="line">		&#125;</span><br><span class="line">		cb_status.setChecked(checked);</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDesc</span><span class="params">(String text)</span></span>&#123;</span><br><span class="line">		tv_desc.setText(text);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="u56DB_u3001_u5728_u5E03_u5C40_u6587_u4EF6_u4E2D_u4F7F_u7528_u8BE5_u81EA_u5B9A_u4E49_u7EC4_u5408_u63A7_u4EF6"><a href="#u56DB_u3001_u5728_u5E03_u5C40_u6587_u4EF6_u4E2D_u4F7F_u7528_u8BE5_u81EA_u5B9A_u4E49_u7EC4_u5408_u63A7_u4EF6" class="headerlink" title="四、在布局文件中使用该自定义组合控件"></a>四、在布局文件中使用该自定义组合控件</h2><p><strong>别忘记声明自定义命名空间</strong><br><em>xmlns:victor=”<a href="http://schemas.android.com/apk/res/com.victor.mobilesafe" target="_blank" rel="external">http://schemas.android.com/apk/res/com.victor.mobilesafe</a>“</em></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&#62;&#10;&#60;LinearLayout xmlns:android=&#34;http://schemas.android.com/apk/res/android&#34;&#10;    xmlns:victor=&#34;http://schemas.android.com/apk/res/com.victor.mobilesafe&#34;&#10;    android:layout_width=&#34;match_parent&#34;&#10;    android:layout_height=&#34;match_parent&#34;&#10;    android:orientation=&#34;vertical&#34; &#62;&#10; &#60;com.victor.mobilesafe.ui.SettingItemView&#10;        android:id=&#34;@+id/siv_update&#34;&#10;        android:layout_width=&#34;wrap_content&#34;&#10;        android:layout_height=&#34;wrap_content&#34;&#10;        victor:desc_off=&#34;&#33258;&#21160;&#26356;&#26032;&#20851;&#38381;&#34;&#10;        victor:desc_on=&#34;&#33258;&#21160;&#26356;&#26032;&#24320;&#21551;&#34;&#10;        victor:title=&#34;&#35774;&#32622;&#33258;&#21160;&#26356;&#26032;&#34; &#62;&#10;    &#60;/com.victor.mobilesafe.ui.SettingItemView&#62;&#10;&#60;/LinearLayout&#62;</span><br></pre></td></tr></table></figure>
+<h2 id="u603B_u7ED3_uFF1A"><a href="#u603B_u7ED3_uFF1A" class="headerlink" title="总结："></a>总结：</h2><ol>
+<li>自定义一个View 一般来说，继承相对布局，或者线性布局  ViewGroup；</li>
+<li>实现父类的构造方法。一般来说，需要在构造方法里初始化自定义的布局文件；</li>
+<li>根据一些需要或者需求，定义一些API方法；</li>
+<li>根据需要，自定义控件的属性，可以参照TextView属性；</li>
+<li>自定义命名空间，例如：<br>xmlns:victor=”<a href="http://schemas.android.com/apk/res/" target="_blank" rel="external">http://schemas.android.com/apk/res/</a>&lt;包名&gt;”<br>xmlns:victor=”<a href="http://schemas.android.com/apk/res/com.victor.mobilesafe" target="_blank" rel="external">http://schemas.android.com/apk/res/com.victor.mobilesafe</a>“</li>
+<li>自定义我们的属性，在Res/values/attrs.xml</li>
+<li>使用我们自定义的属性<br>例如：<pre><code>itheima:title=&quot;设置自动更新&quot;
+itheima:desc_on=&quot;设置自动更新已经开启&quot;
+itheima:desc_off=&quot;设置自动更新已经关闭&quot;
+</code></pre></li>
+<li>在我们自定义控件的带有两个参数的构造方法里AttributeSet attrs 取出我们的属性值，关联自定义布局文件对应的控件；</li>
+</ol>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-SQL学习笔记" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/14/SQL学习笔记/" class="article-date">
+  	<time datetime="2016-05-14T08:13:33.000Z" itemprop="datePublished">2016-05-14</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/05/14/SQL学习笔记/">SQL学习笔记</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="u4E00-_u6570_u636E_u5E93"><a href="#u4E00-_u6570_u636E_u5E93" class="headerlink" title="一.数据库"></a>一.数据库</h2><pre><code>1.创建数据库
+    create database [if not exists] db_name [character set xxx] [collate xxx]
+    *创建一个名称为mydb1的数据库。
+        create database mydb1;
+    *创建一个使用utf8字符集的mydb2数据库。
+        create database mydb2 character set utf8;
+    *创建一个使用utf8字符集，并带校对规则的mydb3数据库。
+        create database mydb3 character set utf8 collate utf8_bin ;
+2.查看数据库
+    show databases;查看所有数据库
+    show create database db_name; 查看数据库的创建方式
+3.修改数据库
+    alter database db_name [character set xxx] [collate xxxx]
+4.删除数据库
+    drop database [if exists] db_name;
+5.使用数据库
+    切换数据库 use db_name;
+    查看当前使用的数据库 select database();
+</code></pre><h2 id="u4E8C_u3001_u8868"><a href="#u4E8C_u3001_u8868" class="headerlink" title="二、表"></a>二、表</h2><pre><code>1.创建表
+        create table tab_name(
+            field1 type,
+            field2 type,
+            ...
+            fieldn type
+        )[character set xxx][collate xxx];
+
+        ****java和mysql的数据类型比较
+            String  ----------------------  char(n) varchar(n) 255  65535
+            byte short int long float double -------------- tinyint  smallint int bigint float double
+            boolean ------------------ bit 0/1
+            Date ------------------ Date、Time、DateTime、timestamp
+            FileInputStream FileReader  ------------------------------ Blob Text
+
+            *创建一个员工表employee
+            create table employee(
+                id int primary key auto_increment ,
+                name varchar(20),
+                gender bit default 1,
+                birthday date,
+                entry_date date,
+                job varchar(20),
+                salary double,
+                resume text
+            );
+
+            约束:
+                primary key
+                unique
+                not null
+                auto_increment 主键字段必须是数字类型。
+                外键约束
+    2.查看表信息
+        desc tab_name 查看表结构
+        show tables 查看当前数据库中的所有的表
+        show create table tab_name    查看当前数据库表建表语句 
+    3.修改表结构
+            (1)增加一列
+                alter table tab_name add [column] 列名 类型;
+            (2)修改一列类型
+                alter table tab_name modify 列名 类型;
+            (3)修改列名
+                alter table tab_name change [column] 列名 新列名 类型;
+            (4)删除一列
+                alter table tab_name drop [column] 列名;
+            (5)修改表名
+                rename table 表名 to 新表名;
+            (6)修该表所用的字符集            
+                alter table student character set utf8;
+
+        4.删除表
+            drop table tab_name;
+</code></pre><h2 id="u4E09_u3001_u8868_u8BB0_u5F55"><a href="#u4E09_u3001_u8868_u8BB0_u5F55" class="headerlink" title="三、表记录"></a>三、表记录</h2><pre><code>1.增加一条记录insert
+    insert into tab_name (field1,filed2,.......) values (value1,value2,.......);
+    *插入的数据应与字段的数据类型相同。
+    *数据的大小应在列的规定范围内，例如：不能将一个长度为80的字符串加入到长度为40的列中。
+    *在values中列出的数据位置必须与被加入的列的排列位置相对应。
+    *字符和日期型数据应包含在单引号中&apos;zhang&apos; &apos;2013-04-20&apos;
+    *插入空值：不指定某列的值或insert into table value(null)，则该列取空值。
+    *如果要插入所有字段可以省写列列表，直接按表中字段顺序写值列表insert into tab_name values(value1,value2,......);
+
+    *练习：使用insert语句向表中插入三个员工的信息。
+    insert into emp (name,birthday,entry_date,job,salary) values (&apos;张飞&apos;,&apos;1990-09-09&apos;,&apos;2000-01-01&apos;,&apos;打手&apos;,999);
+    insert into emp (name,birthday,entry_date,job,salary) values (&apos;关羽&apos;,&apos;1989-08-08&apos;,&apos;2000-01-01&apos;,&apos;财神&apos;,9999);
+    insert into emp (name,birthday,entry_date,job,salary) values (&apos;赵云&apos;,&apos;1991-07-07&apos;,&apos;2000-01-02&apos;,&apos;保安&apos;,888);
+    insert into emp values (7,&apos;黄忠&apos;,1,&apos;1970-05-05&apos;,&apos;2001-01-01&apos;,&apos;战神&apos;,1000,null);
+
+2.修改表记录 
+        update tab_name set field1=value1,field2=value2,......[where 语句]
+        *UPDATE语法可以用新值更新原有表行中的各列。
+        *SET子句指示要修改哪些列和要给予哪些值。
+        *WHERE子句指定应更新哪些行。如没有WHERE子句，则更新所有的行。
+        *实验：
+            将所有员工薪水修改为5000元。
+            update emp set salary=5000;
+            将姓名为’zs’的员工薪水修改为3000元。
+            update emp set salary=3000 where name=&apos;zs&apos;;
+            将姓名为’ls’的员工薪水修改为4000元,job改为ccc。
+            update emp set salary=4000,job=&apos;ccc&apos; where name=&apos;zs&apos;;
+            将wu的薪水在原有基础上增加1000元。    
+            update emp set salar=salary+4000 where name=&apos;wu&apos;;
+
+3.删除表操作
+        delete from tab_name [where ....]
+        *如果不跟where语句则删除整张表中的数据
+        *delete只能用来删除一行记录，不能值删除一行记录中的某一列值（这是update操作）。
+        *delete语句只能删除表中的内容，不能删除表本身，想要删除表，用drop
+        *同insert和update一样，从一个表中删除记录将引起其它表的参照完整性问题，在修改数据库数据时，头脑中应该始终不要忘记这个潜在的问题。
+        *TRUNCATE TABLE也可以删除表中的所有数据，词语句首先摧毁表，再新建表。此种方式删除的数据不能在事务中恢复。
+        *实验：
+            删除表中名称为’zs’的记录。
+            delete from emp where name=&apos;黄忠&apos;;
+            删除表中所有记录。
+            delete from emp;
+            使用truncate删除表中记录。
+            truncate table emp;
+
+
+    4.select操作
+    （1）select [distinct] *|field1，field2，......   from tab_name 其中from指定从哪张表筛选，*表示查找所有列，也可以指定一个列列表明确指定要查找的列，distinct用来剔除重复行。
+            *实验：
+                查询表中所有学生的信息。
+                select * from exam;
+                查询表中所有学生的姓名和对应的英语成绩。
+                select name,english from exam;
+                过滤表中重复数据。
+                select distinct english from exam;
+    （2）select 也可以使用表达式，并且可以使用 as 别名
+                在所有学生分数上加10分特长分显示。
+                select name,english+10,chinese+10,math+10 from exam;
+                统计每个学生的总分。
+                select name,english+chinese+math from exam;
+                使用别名表示学生总分。
+                select name,english+chinese+math as 总成绩 from exam;
+                select name,english+chinese+math 总成绩 from exam;
+                select name english from exam;
+    （3）使用where子句，进行过滤查询。
+                 *练习：
+                查询姓名为XXX的学生成绩
+                select * from exam where name=&apos;张飞&apos;;
+                查询英语成绩大于90分的同学
+                select name,english from exam where english&gt;90;
+                查询总分大于200分的所有同学
+                select name,math+english+chinese as 总成绩 from exam where math+english+chinese&gt;200 ;
+                *where字句中可以使用：
+                        *比较运算符：    
+                                    &gt; &lt; &gt;= &lt;= &lt;&gt;  
+                                    between 10 and 20 值在10到20之间  
+                                    in(10,20,3)值是10或20或30
+                                    like &apos;张pattern&apos; pattern可以是%或者_，如果是%则表示任意多字符，此例中张三丰 张飞 张abcd ，如果是_则表示一个字符张_，张飞符合。张
+                                    Is null
+
+                        *逻辑运算符
+                            在多个条件直接可以使用逻辑运算符 and or not
+                *实验
+                    查询英语分数在 80－100之间的同学。
+                     select name ,english from exam where english between 80 and 100;
+                    查询数学分数为75,76,77的同学。
+                    select name ,math from exam where math in (75,76,77);
+                    查询所有姓张的学生成绩。
+                    select * from exam where name like &apos;张%&apos;;
+                    查询数学分&gt;70，语文分&gt;80的同学。
+                    select name from exam where math&gt;70 and chinese &gt;80;
+                    查找缺考数学的学生的姓名
+                    select name from exam where math is null;
+    （4）Order by 指定排序的列，排序的列即可是表中的列名，也可以是select 语句后指定的别名。
+                Asc 升序、Desc 降序，其中asc为默认值
+                ORDER BY 子句应位于SELECT语句的结尾。
+            *练习：
+                对数学成绩排序后输出。
+                select * from exam order by math;
+                对总分排序按从高到低的顺序输出
+                select name ,(ifnull(math,0)+ifnull(chinese,0)+ifnull(english,0)) 总成绩 from exam order by 总成绩 desc;
+                对姓张的学生成绩排序输出
+                select name ,(ifnull(math,0)+ifnull(chinese,0)+ifnull(english,0)) 总成绩 from exam where name like &apos;张%&apos; order by 总成绩 desc;
+    （5）聚合函数：技巧,先不要管聚合函数要干嘛，先把要求的内容查出来再包上聚合函数即可。
+            count(列名)
+                统计一个班级共有多少学生？先查出所有的学生，再用count包上
+                 select count(*) from exam;
+                统计数学成绩大于70的学生有多少个？
+                 select count(math) from exam where math&gt;70;
+                统计总分大于250的人数有多少？
+                    select count(name) from exam where (ifnull(math,0)+ifnull(chinese,0)+ifnull(english,0))&gt;250;
+            sum(列名)
+                统计一个班级数学总成绩？先查出所有的数学成绩，再用sum包上
+                    select sum(math) from exam;
+                统计一个班级语文、英语、数学各科的总成绩
+                    select sum(math),sum(english),sum(chinese) from exam;
+                统计一个班级语文、英语、数学的成绩总和
+                    select sum(ifnull(math,0)+ifnull(chinese,0)+ifnull(english,0)) as 总成绩 from exam; 
+                统计一个班级语文成绩平均分
+                        select sum(chinese)/count(*) from exam ;
+                注意：sum仅对数值起作用，否则会报错。
+        AVG(列名)：
+                    求一个班级数学平均分？先查出所有的数学分，然后用avg包上。
+                        select avg(ifnull(math,0)) from exam;
+                    求一个班级总分平均分
+                        select avg((ifnull(math,0)+ifnull(chinese,0)+ifnull(english,0))) from exam ;
+        Max、Min
+                    求班级最高分和最低分（数值范围在统计中特别有用）
+                    select Max((ifnull(math,0)+ifnull(chinese,0)+ifnull(english,0))) from exam;
+                    select Min((ifnull(math,0)+ifnull(chinese,0)+ifnull(english,0))) from exam;
+
+    （6）group by字句，其后可以接多个列名，也可以跟having子句对group by 的结果进行筛选。
+                    练习：对订单表中商品归类后，显示每一类商品的总价
+                        select product，sum(price) from orders group by product;
+                    练习：查询购买了几类商品，并且每类总价大于100的商品
+                            select product，sum(price) from orders group by product having sum(price)&gt;100;
+            !~having 和 where 的差别： where语句用在分组之前的筛选，having用在分组之后的筛选，having中可以用合计函数，where中就不行。使用where的地方可以用having替代。
+                        练习:查询商品列表中除了橘子以外的商品，每一类商品的总价格大于500元的商品的名字
+                            select product,sum(price) from orders where product&lt;&gt;&apos;桔子&apos;group by product having sum(price)&gt;500;
+
+
+    （7）重点：Select from where group by having order by 
+                    Mysql在执行sql语句时的执行顺序：from where select group by having order by
+            *分析：        
+                select math+english+chinese as 总成绩 from exam where 总成绩 &gt;250; ---- 不成功
+                select math+english+chinese as 总成绩 from exam having 总成绩 &gt;250; --- 成功
+                select math+english+chinese as 总成绩 from exam group by 总成绩 having 总成绩 &gt;250; ----成功
+                select  math+english+chinese as 总成绩 from exam order by 总成绩;----成功
+                select * from exam as 成绩 where 成绩.math&gt;85; ---- 成功
+</code></pre><h2 id="u56DB_u3001_u7EA6_u675F"><a href="#u56DB_u3001_u7EA6_u675F" class="headerlink" title="四、约束"></a>四、约束</h2><pre><code>1.创建表时指定约束：
+        create table tb(
+            id int primary key auto_increment,
+            name varchar(20) unique not null,
+            ref_id int,
+             foreign key(ref_id) references tb2(id)
+        );
+
+        create table tb2(
+            id int primary key auto_increment
+        );
+
+
+2.外键约束：
+        （1）增加外键：
+            可以明确指定外键的名称，如果不指定外键的名称,mysql会自动为你创建一个外键名称。
+            RESTRICT : 只要本表格里面有指向主表的数据， 在主表里面就无法删除相关记录。
+            CASCADE : 如果在foreign key 所指向的那个表里面删除一条记录，那么在此表里面的跟那个key一样的所有记录都会一同删掉。
+            alter table book add [constraint FK_BOOK] foreign key(pubid) references pub_com(id) [on delete restrict] [on update restrict];
+
+        （2）删除外键
+            alter table 表名 drop foreign key 外键（区分大小写，外键名可以desc 表名查看）;
+
+
+3.主键约束：
+        （1）增加主键（自动增长，只有主键可以自动增长）
+            Alter table tb add primary key(id) [auto_increment];
+        （2）删除主键
+            alter table 表名 drop primary key
+        （3）增加自动增长
+            Alter table employee modify id int auto_increment;
+        （4）删除自动增长
+            Alter table tb modify id int;        
+</code></pre><h2 id="u4E94_u3001_u591A_u8868_u8BBE_u8BA1"><a href="#u4E94_u3001_u591A_u8868_u8BBE_u8BA1" class="headerlink" title="五、多表设计"></a>五、多表设计</h2><pre><code>一对一（311教室和20130405班级，两方都是一）:在任意一方保存另一方的主键
+一对多、多对一（班级和学生，其中班级为1，学生为多）：在多的一方保存一的一方的主键
+多对多（教师和学生，两方都是多）：使用中间表，保存对应关系
+</code></pre><h2 id="u516D_u3001_u591A_u8868_u67E5_u8BE2"><a href="#u516D_u3001_u591A_u8868_u67E5_u8BE2" class="headerlink" title="六、多表查询"></a>六、多表查询</h2><pre><code>create table tb (id int primary key,name varchar(20) );
+create table ta (
+        id int primary key,
+        name varchar(20),
+        tb_id int
+                                );
+insert into tb values(1,&apos;财务部&apos;);
+insert into tb values(2,&apos;人事部&apos;);
+insert into tb values(3,&apos;科技部&apos;);
+
+insert into ta values (1,&apos;刘备&apos;,1);
+insert into ta values (2,&apos;关羽&apos;,2);
+insert into ta values (3,&apos;张飞&apos;,3);
+
+
+mysql&gt; select * from ta;
+    +----+------+-------+
+    | id | name | tb_id |
+    +----+------+-------+
+    |  1 | aaa  |     1 |
+    |  2 | bbb  |     2 |
+    |  3 | bbb  |     4 |
+    +----+------+-------+
+mysql&gt; select * from tb;
+    +----+------+
+    | id | name |
+    +----+------+
+    |  1 | xxx  |
+    |  2 | yyy  |
+    |  3 | yyy  |
+    +----+------+
+
+1.笛卡尔积查询：两张表中一条一条对应的记录，m条记录和n条记录查询，最后得到m*n条记录，其中很多错误数据
+    select * from ta ,tb;
+
+    mysql&gt; select * from ta ,tb;
+        +----+------+-------+----+------+
+        | id | name | tb_id | id | name |
+        +----+------+-------+----+------+
+        |  1 | aaa  |     1 |  1 | xxx  |
+        |  2 | bbb  |     2 |  1 | xxx  |
+        |  3 | bbb  |     4 |  1 | xxx  |
+        |  1 | aaa  |     1 |  2 | yyy  |
+        |  2 | bbb  |     2 |  2 | yyy  |
+        |  3 | bbb  |     4 |  2 | yyy  |
+        |  1 | aaa  |     1 |  3 | yyy  |
+        |  2 | bbb  |     2 |  3 | yyy  |
+        |  3 | bbb  |     4 |  3 | yyy  |
+        +----+------+-------+----+------+
+2.内连接：查询两张表中都有的关联数据,相当于利用条件从笛卡尔积结果中筛选出了正确的结果。
+    select * from ta ,tb where ta.tb_id = tb.id;
+    select * from ta inner join tb on ta.tb_id = tb.id;
+
+    mysql&gt; select * from ta inner join tb on ta.tb_id = tb.id;
+        +----+------+-------+----+------+
+        | id | name | tb_id | id | name |
+        +----+------+-------+----+------+
+        |  1 | aaa  |     1 |  1 | xxx  |
+        |  2 | bbb  |     2 |  2 | yyy  |
+        +----+------+-------+----+------+
+3.外连接
+    （1）左外连接：在内连接的基础上增加左边有右边没有的结果
+    select * from ta left join tb on ta.tb_id = tb.id;
+
+    mysql&gt; select * from ta left join tb on ta.tb_id = tb.id;
+        +----+------+-------+------+------+
+        | id | name | tb_id | id   | name |
+        +----+------+-------+------+------+
+        |  1 | aaa  |     1 |    1 | xxx  |
+        |  2 | bbb  |     2 |    2 | yyy  |
+        |  3 | bbb  |     4 | NULL | NULL |
+        +----+------+-------+------+------+
+    （2）右外连接：在内连接的基础上增加右边有左边没有的结果
+        select * from ta right join tb on ta.tb_id = tb.id;
+
+        mysql&gt; select * from ta right join tb on ta.tb_id = tb.id;
+        +------+------+-------+----+------+
+        | id   | name | tb_id | id | name |
+        +------+------+-------+----+------+
+        |    1 | aaa  |     1 |  1 | xxx  |
+        |    2 | bbb  |     2 |  2 | yyy  |
+        | NULL | NULL |  NULL |  3 | yyy  |
+        +------+------+-------+----+------+
+
+    （3）全外连接：在内连接的基础上增加左边有右边没有的和右边有左边没有的结果
+        select * from ta full join tb on ta.tb_id = tb.id; --mysql不支持全外连接
+        select * from ta left join tb on ta.tb_id = tb.id 
+        union
+        select * from ta right join tb on ta.tb_id = tb.id;
+
+        mysql&gt; select * from ta left join tb on ta.tb_id = tb.id
+            -&gt; union
+            -&gt; select * from ta right join tb on ta.tb_id = tb.id; --mysql可以使用此种方式间接实现全外连接
+        +------+------+-------+------+------+
+        | id   | name | tb_id | id   | name |
+        +------+------+-------+------+------+
+        |    1 | aaa  |     1 |    1 | xxx  |
+        |    2 | bbb  |     2 |    2 | yyy  |
+        |    3 | bbb  |     4 | NULL | NULL |
+        | NULL | NULL |  NULL |    3 | yyy  |
+        +------+------+-------+------+------+
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-ListView的使用及其优化" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/14/ListView的使用及其优化/" class="article-date">
+  	<time datetime="2016-05-14T08:10:53.000Z" itemprop="datePublished">2016-05-14</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/05/14/ListView的使用及其优化/">ListView的使用及其优化</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>ListView（视图组件）是Android中最常用的一个组件，根据不同的使用情况可以有多种方式创建方式</p>
+</blockquote>
+<h2 id="u4E00_u3001_u76F4_u63A5_u4F7F_u7528ListView_u7EC4_u4EF6_u521B_u5EFA"><a href="#u4E00_u3001_u76F4_u63A5_u4F7F_u7528ListView_u7EC4_u4EF6_u521B_u5EFA" class="headerlink" title="一、直接使用ListView组件创建"></a>一、直接使用ListView组件创建</h2><h3 id="1-_u76F4_u63A5_u5728XML_u4E2D_u521B_u5EFAListView_u7528entries_u5C5E_u6027_u9644_u4E0A_u4E00_u4E2A_u6570_u7EC4_u8D44_u6E90"><a href="#1-_u76F4_u63A5_u5728XML_u4E2D_u521B_u5EFAListView_u7528entries_u5C5E_u6027_u9644_u4E0A_u4E00_u4E2A_u6570_u7EC4_u8D44_u6E90" class="headerlink" title="1.直接在XML中创建ListView用entries属性附上一个数组资源"></a>1.直接在XML中创建ListView用entries属性附上一个数组资源</h3><blockquote>
+<p>其中divider属性是设置分割线可以使用颜色和drawable资源分割</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;ListView&#10;       android:id=&#34;@+id/listView1&#34;&#10;       android:layout_width=&#34;match_parent&#34;&#10;       android:layout_height=&#34;wrap_content&#34; &#10;       android:divider=&#34;#33000000&#34;&#10;       android:dividerHeight=&#34;0.2dp&#34;&#10;       android:footerDividersEnabled=&#34;true&#34;&#10;       android:headerDividersEnabled=&#34;true&#34;&#10;       android:entries=&#34;@arrary/ctype&#34;&#62;&#10;   &#60;/ListView&#62;</span><br></pre></td></tr></table></figure>
+<p>在values下定义一个数组资源文件arrays.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;resources&#62;&#10;&#60;item &#62;&#24773;&#26223;&#27169;&#24335;1&#60;/item&#62;&#10;&#60;item &#62;&#24773;&#26223;&#27169;&#24335;2&#60;/item&#62;  &#10;&#60;item &#62;&#24773;&#26223;&#27169;&#24335;3&#60;/item&#62;&#10;&#60;/resources&#62;</span><br></pre></td></tr></table></figure>
+<h3 id="2-_u521B_u5EFAArrayAdapter_u6307_u5B9A_u8981_u663E_u793A_u7684_u5217_u8868_u9879"><a href="#2-_u521B_u5EFAArrayAdapter_u6307_u5B9A_u8981_u663E_u793A_u7684_u5217_u8868_u9879" class="headerlink" title="2.创建ArrayAdapter指定要显示的列表项"></a>2.创建ArrayAdapter指定要显示的列表项</h3><p>在oncreat方法中关联适配器</p>
+<blockquote>
+<p>simple_list_item_1:列表项为普通文本</p>
+<p>simple_list_item_2：列表项为普通文本字体略大<br>simple_list_item_checked：列表项为一个已选中的<br>simple_list_item_multiple_choice：带有复选框的列表项<br>simple_list_item_single_choice：带有单选按钮的列表项</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">listview = (ListView) findViewById(R.id.listView1);</span><br><span class="line"> ArrayAdapter&lt;CharSequence&gt; adapter = ArrayAdapter.createFromResource(<span class="keyword">this</span>,R.array.ctype, android.R.layout.simple_list_item_checked);</span><br><span class="line">        listview.setAdapter(adapter);</span><br></pre></td></tr></table></figure>
+<h2 id="u4E8C_u3001_u8BA9Activity_u7EE7_u627FListActivity_u5B9E_u73B0"><a href="#u4E8C_u3001_u8BA9Activity_u7EE7_u627FListActivity_u5B9E_u73B0" class="headerlink" title="二、让Activity继承ListActivity实现"></a>二、让Activity继承ListActivity实现</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ActivityMain</span> <span class="keyword">extends</span> <span class="title">ListActivity</span> </span>&#123;</span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">		String[] ctype =&#123;<span class="string">"1"</span>,<span class="string">"2"</span>,<span class="string">"3"</span>&#125;; </span><br><span class="line">		ArrayAdapter&lt;String&gt; adapter = <span class="keyword">new</span> ArrayAdapter&lt;String&gt;(<span class="keyword">this</span>,android.R.layout.simple_list_item_1,ctype);</span><br><span class="line">		setListAdapter(adapter);</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onListItemClick</span><span class="params">(ListView l, View v, <span class="keyword">int</span> position, <span class="keyword">long</span> id)</span> </span>&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">super</span>.onListItemClick(l, v, position, id);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="u4E09_u3001SimpleAdapter_u548CBaseAapter_u7684_u4F7F_u7528_uFF08_u91CD_u70B9_uFF09"><a href="#u4E09_u3001SimpleAdapter_u548CBaseAapter_u7684_u4F7F_u7528_uFF08_u91CD_u70B9_uFF09" class="headerlink" title="三、SimpleAdapter和BaseAapter的使用（重点）"></a>三、SimpleAdapter和BaseAapter的使用（重点）</h2><p><strong>SimpleAdapter的使用</strong></p>
+<ol>
+<li>在main.xml中添加ListView组件</li>
+<li>编写用于布局列表项内容的布局文件items.xml</li>
+<li>创建一个简单适配器与ListView关联</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&#62;&#10;&#60;LinearLayout&#10;  xmlns:android=&#34;http://schemas.android.com/apk/res/android&#34;&#10;  android:orientation=&#34;horizontal&#34;&#10;  android:layout_width=&#34;match_parent&#34;&#10;  android:layout_height=&#34;match_parent&#34;&#62;&#10;&#60;ImageView &#10;&#9;android:id=&#34;@+id/image&#34; &#10;&#9;android:paddingRight=&#34;10px&#34;&#10;&#9;android:paddingTop=&#34;20px&#34;&#10;&#9;android:paddingBottom=&#34;20px&#34;&#10;&#9;android:adjustViewBounds=&#34;true&#34;&#10;&#9;android:maxWidth=&#34;72px&#34;&#10;&#9;android:maxHeight=&#34;72px&#34;&#10;&#9;android:layout_height=&#34;wrap_content&#34; &#10;&#9;android:layout_width=&#34;wrap_content&#34;/&#62;  &#10; &#60;TextView  &#10;    android:layout_width=&#34;wrap_content&#34; &#10;    android:layout_height=&#34;wrap_content&#34; &#10;    android:padding=&#34;10px&#34;&#10;    android:layout_gravity=&#34;center&#34;&#10;    android:id=&#34;@+id/title&#34;&#10;    /&#62;&#9; &#10;&#60;/LinearLayout&#62;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">		setContentView(R.layout.main);</span><br><span class="line">		ListView listview = (ListView) findViewById(R.id.listView1); <span class="comment">// 获取列表视图</span></span><br><span class="line">		<span class="keyword">int</span>[] imageId = <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; R.drawable.img01, R.drawable.img02,</span><br><span class="line">				R.drawable.img03, R.drawable.img04, R.drawable.img05,</span><br><span class="line">				R.drawable.img06, R.drawable.img07, R.drawable.img08 &#125;; <span class="comment">// 定义并初始化保存图片id的数组</span></span><br><span class="line">		String[] title = <span class="keyword">new</span> String[] &#123; <span class="string">"保密设置"</span>, <span class="string">"安全"</span>, <span class="string">"系统设置"</span>, <span class="string">"上网"</span>, <span class="string">"我的文档"</span>,</span><br><span class="line">				<span class="string">"GPS导航"</span>, <span class="string">"我的音乐"</span>, <span class="string">"E-mail"</span> &#125;; <span class="comment">// 定义并初始化保存列表项文字的数组</span></span><br><span class="line">		List&lt;Map&lt;String, Object&gt;&gt; listItems = <span class="keyword">new</span> ArrayList&lt;Map&lt;String, Object&gt;&gt;(); <span class="comment">// 创建一个list集合</span></span><br><span class="line">		<span class="comment">// 通过for循环将图片id和列表项文字放到Map中，并添加到list集合中</span></span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; imageId.length; i++) &#123;</span><br><span class="line">			Map&lt;String, Object&gt; map = <span class="keyword">new</span> HashMap&lt;String, Object&gt;(); <span class="comment">// 实例化Map对象</span></span><br><span class="line">			map.put(<span class="string">"image"</span>, imageId[i]);</span><br><span class="line">			map.put(<span class="string">"title"</span>, title[i]);</span><br><span class="line">			listItems.add(map); <span class="comment">// 将map对象添加到List集合中</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		SimpleAdapter adapter = <span class="keyword">new</span> SimpleAdapter(<span class="keyword">this</span>, listItems,</span><br><span class="line">				R.layout.items, <span class="keyword">new</span> String[] &#123; <span class="string">"title"</span>, <span class="string">"image"</span> &#125;, <span class="keyword">new</span> <span class="keyword">int</span>[] &#123;</span><br><span class="line">						R.id.title, R.id.image &#125;); <span class="comment">// 创建SimpleAdapter</span></span><br><span class="line">		listview.setAdapter(adapter); <span class="comment">// 将适配器与ListView关联</span></span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="BaseAdapter_u7684_u4F7F_u7528_u53CAListView_u7684_u4F18_u5316"><a href="#BaseAdapter_u7684_u4F7F_u7528_u53CAListView_u7684_u4F18_u5316" class="headerlink" title="BaseAdapter的使用及ListView的优化"></a>BaseAdapter的使用及ListView的优化</h3><p>使用方法同上主要是BaseAdapter的使用更加灵活也更加强大，可以向其中添加其他控件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&#62;&#10;&#60;RelativeLayout xmlns:android=&#34;http://schemas.android.com/apk/res/android&#34;&#10;    android:layout_width=&#34;fill_parent&#34;&#10;    android:layout_height=&#34;fill_parent&#34; &#62;&#10;&#10;    &#60;ImageView&#10;        android:id=&#34;@+id/imageView1&#34;&#10;          android:layout_width=&#34;50dip&#34;&#10;        android:layout_height=&#34;50dip&#34;&#10;       android:layout_marginLeft=&#34;5dip&#34;&#10;       android:layout_marginTop=&#34;5dip&#34;&#10;       android:layout_marginBottom=&#34;5dip&#34;    &#10;        android:src=&#34;@android:drawable/ic_lock_power_off&#34; /&#62;&#10;    &#10;    &#60;TextView&#10;        android:id=&#34;@+id/textView1&#34;&#10;        android:layout_width=&#34;wrap_content&#34;&#10;        android:layout_height=&#34;wrap_content&#34;&#10;        android:layout_above=&#34;@+id/textView2&#34;&#10;        android:layout_toRightOf=&#34;@+id/imageView1&#34;&#10;        android:text=&#34;name&#34;&#10;        android:textColor=&#34;#000000&#34;&#10;        android:textSize=&#34;20sp&#34; /&#62;&#10;&#10;    &#60;TextView&#10;        android:id=&#34;@+id/textView2&#34;&#10;        android:layout_width=&#34;wrap_content&#34;&#10;        android:layout_height=&#34;wrap_content&#34;&#10;        android:layout_alignBottom=&#34;@+id/imageView1&#34;&#10;        android:layout_toRightOf=&#34;@+id/imageView1&#34;&#10;        android:text=&#34;number&#34;&#10;        android:textColor=&#34;#000000&#34;&#10;        android:textSize=&#34;20sp&#34; /&#62;&#10;&#10;&#10;&#60;/RelativeLayout&#62;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> ListView lv;</span><br><span class="line">	<span class="keyword">private</span> List&lt;MyInfo&gt; infos;</span><br><span class="line">	<span class="keyword">private</span> Random random;</span><br><span class="line"></span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        lv = (ListView) findViewById(R.id.listView1);</span><br><span class="line">        infos = <span class="keyword">new</span> ArrayList&lt;MyInfo&gt;();</span><br><span class="line"><span class="comment">//通过for循环将name和number添加到List集合中</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">			MyInfo userInfo = <span class="keyword">new</span> MyInfo();</span><br><span class="line">			userInfo.setName(<span class="string">"name"</span>+i);</span><br><span class="line">			userInfo.setNumber(<span class="string">"number"</span>+i);</span><br><span class="line">			infos.add(userInfo);</span><br><span class="line">			System.out.println(userInfo.toString());	</span><br><span class="line">		&#125;</span><br><span class="line">       </span><br><span class="line">        lv.setAdapter(<span class="keyword">new</span> MyAdapter());</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">MyAdapter</span> <span class="keyword">extends</span> <span class="title">BaseAdapter</span></span>&#123;</span><br><span class="line"></span><br><span class="line">		<span class="annotation">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCount</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> infos.size();<span class="comment">//返回listview的长度</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="annotation">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> View <span class="title">getView</span><span class="params">(<span class="keyword">int</span> position, View convertView, ViewGroup parent)</span> </span>&#123;</span><br><span class="line">			MyInfo userInfo = infos.get(position);</span><br><span class="line">			View view;</span><br><span class="line">			ViewHolder holder;</span><br><span class="line">			<span class="comment">//减少内存中view对象创建的次数</span></span><br><span class="line">			<span class="keyword">if</span> (convertView != <span class="keyword">null</span> &amp;&amp; convertView <span class="keyword">instanceof</span> RelativeLayout) &#123;</span><br><span class="line">				view = convertView;<span class="comment">//复用已经回收掉的view对象</span></span><br><span class="line">				holder = (ViewHolder) view.getTag();<span class="comment">//得到他们的引用</span></span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				view = View.inflate(getApplicationContext(),</span><br><span class="line">						R.layout.item_layout, <span class="keyword">null</span>);<span class="comment">//把布局文件转化成View对象</span></span><br><span class="line">				holder = <span class="keyword">new</span> ViewHolder();</span><br><span class="line">				<span class="comment">//把ID存到存到holder对象中</span></span><br><span class="line">                <span class="comment">//注意是在view下findViewById</span></span><br><span class="line">				holder.iv = (ImageView) view.findViewById(R.id.imageView1);</span><br><span class="line">				holder.tv1 = (TextView) view.findViewById(R.id.textView1);</span><br><span class="line">				holder.tv2 = (TextView) view.findViewById(R.id.textView2);</span><br><span class="line">				view.setTag(holder);<span class="comment">//对象创建出来时找到他们的引用存到holder中</span></span><br><span class="line">			&#125;</span><br><span class="line">			holder.tv1.setText(infos.get(position).getName());</span><br><span class="line">			holder.tv2.setText(infos.get(position).getNumber());</span><br><span class="line">			<span class="keyword">return</span> view;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="annotation">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> Object <span class="title">getItem</span><span class="params">(<span class="keyword">int</span> position)</span> </span>&#123;			</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="annotation">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">getItemId</span><span class="params">(<span class="keyword">int</span> position)</span> </span>&#123;			</span><br><span class="line">			<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">		&#125;		</span><br><span class="line">    	</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/*</span><br><span class="line">     * view对象的容器记录View对象的内存地址相当于一个记事本</span><br><span class="line">     */</span></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">ViewHolder</span></span>&#123;</span><br><span class="line">    	TextView tv1;</span><br><span class="line">    	TextView tv2;</span><br><span class="line">    	ImageView iv;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class MyInfo &#123;&#10;&#9;private  String name; &#10;&#9;private String number;//&#20063;&#21487;&#20197;&#28155;&#21152;Bitmap&#10;&#9;&#10;&#9;@Override&#10;&#9;public String toString() &#123;&#10;&#9;&#9;return &#34;MyInfo [name=&#34; + name + &#34;, number=&#34; + number + &#34;]&#34;;&#10;&#9;&#125;&#10;&#9;public String getName() &#123;&#10;&#9;&#9;return name;&#10;&#9;&#125;&#10;&#9;public void setName(String name) &#123;&#10;&#9;&#9;this.name = name;&#10;&#9;&#125;&#10;&#9;public String getNumber() &#123;&#10;&#9;&#9;return number;&#10;&#9;&#125;&#10;&#9;public void setNumber(String number) &#123;&#10;&#9;&#9;this.number = number;&#10;&#9;&#125;&#10;&#9;&#10;&#9;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>注意:(很多人不注意下面的这条语句是在view下findViewById，少了view会造成空指针异常)</strong></p>
+<p><em>holder.iv = (ImageView) view.findViewById(R.id.imageView1);</em></p>
+<blockquote>
+<p>优化的原理就是动态循环复用已经回收掉的ListView对象(回收后为convertview)，保持一个界面下的ListView的条目数的动态平衡。(具体内容参考代码注释即可)</p>
+</blockquote>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Splash界面的实现过程" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/14/Splash界面的实现过程/" class="article-date">
+  	<time datetime="2016-05-14T08:04:51.000Z" itemprop="datePublished">2016-05-14</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/05/14/Splash界面的实现过程/">Splash界面的实现过程</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="u4E00-splash_u754C_u9762_u7684_u4F5C_u7528"><a href="#u4E00-splash_u754C_u9762_u7684_u4F5C_u7528" class="headerlink" title="一.splash界面的作用"></a>一.splash界面的作用</h2><ol>
+<li>用来展现产品的Logo</li>
+<li>应用程序初始化的操作</li>
+<li>检查应用程序的版本</li>
+<li>检查当前应用程序是否合法注册</li>
+</ol>
+<h2 id="u4E8C_u3001_u754C_u9762_u7684xml_u5B9A_u4E49"><a href="#u4E8C_u3001_u754C_u9762_u7684xml_u5B9A_u4E49" class="headerlink" title="二、界面的xml定义"></a>二、界面的xml定义</h2><p>写一个布局背景设置为产品的logo图片，再添加一个textview显示版本号。</p>
+<pre><code>&lt;TextView
+android:id=&quot;@+id/tv_splash_version&quot;
+android:layout_width=&quot;wrap_content&quot;
+android:layout_height=&quot;wrap_content&quot;
+android:textColor=&quot;#000000&quot;
+android:textStyle=&quot;bold&quot;
+android:shadowDx=&quot;1&quot;//阴影的偏移量
+android:shadowDy=&quot;1&quot;
+android:shadowRadius=&quot;0.2&quot;//阴影的半径
+android:shadowColor=&quot;#ffff00&quot;
+android:text=&quot;版本：1.0&quot;
+android:textSize=&quot;16sp&quot;
+android:layout_centerInParent=&quot;true&quot;/&gt;
+</code></pre><h2 id="u4E09_u3001_u52A8_u6001_u83B7_u53D6_u7248_u672C_u53F7_u7684_u65B9_u6CD5"><a href="#u4E09_u3001_u52A8_u6001_u83B7_u53D6_u7248_u672C_u53F7_u7684_u65B9_u6CD5" class="headerlink" title="三、动态获取版本号的方法"></a>三、动态获取版本号的方法</h2><pre><code class="java"><span class="function"><span class="keyword">public</span> String <span class="title">getAppVersion</span><span class="params">()</span></span>{
+    PackageManager pm = getPackageManager();
+    <span class="keyword">try</span> {
+        PackageInfo info = pm.getPackageInfo(getPackageName(), <span class="number">0</span>);
+        <span class="keyword">return</span> info.versionName;
+    } <span class="keyword">catch</span> (NameNotFoundException e) {
+        e.printStackTrace();
+        <span class="comment">//不可能发生；</span>
+        <span class="keyword">return</span> <span class="string">""</span>;
+    }
+}
+</code></pre>
+<h2 id="u56DB_u3001_u94FE_u63A5_u670D_u52A1_u5668_u83B7_u53D6_u66F4_u65B0_u4FE1_u606F"><a href="#u56DB_u3001_u94FE_u63A5_u670D_u52A1_u5668_u83B7_u53D6_u66F4_u65B0_u4FE1_u606F" class="headerlink" title="四、链接服务器获取更新信息"></a>四、链接服务器获取更新信息</h2><ol>
+<li><p>升级提醒的对话框</p>
+<pre><code class="java"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">showUpdateDialog</span><span class="params">()</span> </span>{
+AlertDialog.Builder build = <span class="keyword">new</span> Builder(<span class="keyword">this</span>);
+build.setTitle(<span class="string">"发现新版本"</span>);
+build.setMessage(description);
+build.setNegativeButton(<span class="string">"立刻升级"</span>, <span class="keyword">new</span> OnClickListener() {
+
+    <span class="meta">@Override</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(DialogInterface dialog, <span class="keyword">int</span> which)</span> </span>{
+        <span class="comment">//升级的代码；</span>
+    };
+});
+build.setPositiveButton(<span class="string">"下次再说"</span>, <span class="keyword">new</span> OnClickListener() {
+
+    <span class="meta">@Override</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(DialogInterface dialog, <span class="keyword">int</span> which)</span> </span>{
+        dialog.dismiss();
+ enterHome();
+
+    }
+});
+build.show();
+</code></pre>
+</li>
+<li><p>在子线程中请求服务器的代码  checkup（）方法</p>
+<p>~~~java</p>
+<pre><code>private void checkup() {
+ new Thread() {
+    public void run() {
+        Message msg = Message.obtain();
+        long startTime = System.currentTimeMillis();//启动该线程的系统时间
+        try {
+             //请求网络的代码
+            URL url = new URL(getString(R.string.serverurl));
+            HttpURLConnection conn = (HttpURLConnection) url
+                    .openConnection();
+            conn.setRequestMethod(&quot;GET&quot;);//请求方法
+            conn.setConnectTimeout(4000);//超时时间
+            int code = conn.getResponseCode();//返回码200请求成功
+            if (code == 200) {
+                InputStream is = conn.getInputStream();
+                String result = StreamTools.readFromStream(is);
+                Log.i(TAG, &quot;联网成功&quot; + result);
+                JSONObject obj = new JSONObject(result);//解析json字符串
+                String version = (String) obj.get(&quot;version&quot;);//版本信息
+                description = (String) obj.get(&quot;description&quot;);//描述信息
+                apkurl = (String) obj.get(&quot;apkurl&quot;);
+                if (getAppVersion().equals(version)) {
+                    msg.what = ENTER_HOME;
+                } else {
+                    msg.what = SHOW_UPDATE_DIALOG;
+
+                }
+            }
+        } catch (MalformedURLException e) {
+
+            e.printStackTrace();
+            msg.what = URL_ERROR;
+        } catch (IOException e) {
+            e.printStackTrace();
+            msg.what = NETWORK_ERROR;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            msg.what = JSON_ERROR;
+        } finally {
+            handler.sendMessage(msg);
+            long endTime = System.currentTimeMillis();//该线程执行完毕的时间
+            long dTime = endTime-startTime;//该线程的阻塞时间
+            if (dTime&lt;3000) {
+                try {
+                    Thread.sleep(3000-dTime);//若该线程的阻塞时间小于三秒继续睡眠到三秒
+                } catch (InterruptedException e) {                            
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}.start();
+
+}
+</code></pre><p>   //handler</p>
+<pre><code>private Handler handler = new Handler() {
+
+@Override
+public void handleMessage(Message msg) {
+    // TODO Auto-generated method stub
+    super.handleMessage(msg);
+    switch (msg.what) {
+    case SHOW_UPDATE_DIALOG:
+        showUpdateDialog();
+        break;
+    case ENTER_HOME:
+        Toast.makeText(getApplicationContext(), &quot;&quot;, 0).show();
+        enterhome();
+        break;
+    case URL_ERROR:
+        Toast.makeText(getApplicationContext(), &quot;URL_ERROR&quot;, 0).show();
+        enterhome();
+        break;
+    case NETWORK_ERROR:
+        Toast.makeText(getApplicationContext(), &quot;NETWORK_ERROR&quot;, 0).show();
+        enterhome();
+        break;
+
+    case JSON_ERROR:
+        Toast.makeText(getApplicationContext(), &quot;JSON_ERROR&quot;, 0).show();
+        enterhome();
+        break;
+    }
+}
+</code></pre></li>
+</ol>
+<pre><code>};
+</code></pre><pre><code>
+
+
+## 五、下载文件（使用Afinal框架）并调用**系统安装工具**安装APK  
+
+~~~java
+ if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                FinalHttp finalHttp = new FinalHttp();
+                    finalHttp.download(apkurl,Environment.getExternalStorageDirectory().getAbsolutePath()+
+                      &quot;/mobilesafe2.0.apk&quot; , new AjaxCallBack&lt;File&gt;() {
+
+                        @Override
+                        public void onLoading(long count, long current) {
+                            super.onLoading(count, current);
+                            tv_uapdate_info.setVisibility(View.VISIBLE);
+                            int progress =(int) (current*100/count);
+                                    tv_uapdate_info.setText(&quot;下载进度：&quot;+progress+&quot;%&quot;);
+                        }
+
+                        @Override
+                        public void onFailure(Throwable t, int errorNo,
+                                String strMsg) {
+                            t.printStackTrace();
+                            Toast.makeText(getApplicationContext(), &quot;下载失败&quot;, 0).show();
+                            enterhome();
+
+                            super.onFailure(t, errorNo, strMsg);
+                        }
+
+                        @Override
+                        public void onSuccess(File t) {
+
+                            super.onSuccess(t);
+                            installAPK(t);
+
+                        }
+
+                        private void installAPK(File t) {
+                            Intent intent = new Intent();//自动安装程序可调用该段代码
+                            intent.setAction(&quot;android.intent.action.VIEW&quot;);
+                            intent.addCategory(&quot;android.intent.category.DEFAULT&quot;);
+                            intent.setDataAndType(Uri.fromFile(t), &quot;application/vnd.android.package-archive&quot;);
+                            startActivity(intent);                        
+                        }
+
+                    });
+
+                }else{
+                    Toast.makeText(getApplicationContext(), &quot;请插入内存卡再试&quot;,0).show();
+                    return;
+
+                }
+</code></pre><blockquote>
+<p>其他：</p>
+<p>1、显示4.0的样式：方式是去掉功能清单里的Activity对应的android:theme；<br>  放到application里面；</p>
+<p>2、当splash页面弹出升级提示框过滤点击返回的是两种方式：</p>
+<p><em>builder.setCancelable(false);<br>  设置setOnCancelListener 当触屏的时候直接进入主页面</em>  </p>
+<p>对话框是挂载在Activity上面的,<strong>如果Activity不存在，对话框就不能被创建</strong>。<br>getApplicationContext();生命周期长，只要应用还存活它就存在；this 生命周期短，只要Activity不存在了，系统就会回收<br>其中：getBaseContext(),getApplication(),getApplicationContext(); 都不能放在AlertDialog做上下文；</p>
+</blockquote>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Android数据存储的方法（ROM、SD卡、SharedPreference）" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/14/Android数据存储的方法（ROM、SD卡、SharedPreference）/" class="article-date">
+  	<time datetime="2016-05-14T08:02:08.000Z" itemprop="datePublished">2016-05-14</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/05/14/Android数据存储的方法（ROM、SD卡、SharedPreference）/">Android数据存储的方法（ROM、SD卡、SharedPreference）</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="u4E00_u3001_u4FDD_u5B58_u6587_u4EF6_u5230_u624B_u673A_u5185_u5B58"><a href="#u4E00_u3001_u4FDD_u5B58_u6587_u4EF6_u5230_u624B_u673A_u5185_u5B58" class="headerlink" title="一、保存文件到手机内存"></a>一、保存文件到手机内存</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line">	 * 保存数据到手机rom的文件里面.</span><br><span class="line">	 * <span class="doctag">@param</span> context 应用程序的上下文 提供环境</span><br><span class="line">	 * <span class="doctag">@param</span> name 用户名</span><br><span class="line">	 * <span class="doctag">@param</span> password 密码</span><br><span class="line">	 * <span class="doctag">@throws</span> Exception</span><br><span class="line">	 */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">saveToRom</span><span class="params">(Context context, String name , String password)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">		<span class="comment">//File file = new File("/data/data/com.itheima.login/files/info.txt");</span></span><br><span class="line">		File file = <span class="keyword">new</span> File(context.getFilesDir(),<span class="string">"info.txt"</span>);<span class="comment">//该文件在data下的files文件夹下getCacheDir()在cache文件夹下 文件大小不要超过1Mb</span></span><br><span class="line">		FileOutputStream fos = <span class="keyword">new</span> FileOutputStream(file);</span><br><span class="line">		String txt = name+<span class="string">":"</span>+password;</span><br><span class="line">		fos.write(txt.getBytes());</span><br><span class="line">		fos.flush();</span><br><span class="line">		fos.close();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line">	 * 获取保存的数据</span><br><span class="line">	 * <span class="doctag">@param</span> context</span><br><span class="line">	 * <span class="doctag">@return</span></span><br><span class="line">	 */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Map&lt;String,String&gt; getUserInfo(Context context) &#123;</span><br><span class="line">		File file = <span class="keyword">new</span> File(context.getFilesDir(),<span class="string">"info.txt"</span>);</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			FileInputStream fis = <span class="keyword">new</span> FileInputStream(file);</span><br><span class="line">           <span class="comment">//也可直接读取文件String result = StreamTools.readFromStream(fis);</span></span><br><span class="line">			BufferedReader br = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(fis));</span><br><span class="line">			String str = br.readLine();</span><br><span class="line">			String[] infos = str.split(<span class="string">":"</span>);</span><br><span class="line">			Map&lt;String,String&gt; map = <span class="keyword">new</span> HashMap&lt;String, String&gt;();</span><br><span class="line">			map.put(<span class="string">"username"</span>, infos[<span class="number">0</span>]);</span><br><span class="line">			map.put(<span class="string">"password"</span>, infos[<span class="number">1</span>]);</span><br><span class="line">			<span class="keyword">return</span> map;</span><br><span class="line">		&#125; <span class="keyword">catch</span>(Exception e) &#123;</span><br><span class="line">			</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line"><span class="comment">//最后可以直接调用上面的方法读取信息</span></span><br><span class="line">Map&lt;String, String&gt; map = getUserInfo(<span class="keyword">this</span>);</span><br><span class="line">If(map!=<span class="keyword">null</span>)&#123;</span><br><span class="line">Textview.setText(map.get(“username”));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="u4E8C_u3001_u4FDD_u5B58_u6587_u4EF6_u5230SD_u5361"><a href="#u4E8C_u3001_u4FDD_u5B58_u6587_u4EF6_u5230SD_u5361" class="headerlink" title="二、保存文件到SD卡"></a>二、保存文件到SD卡</h3><p>获取手机sd空间的大小：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">File path = Environment.getExternalStorageDirectory();</span><br><span class="line">		StatFs stat = <span class="keyword">new</span> StatFs(path.getPath());</span><br><span class="line">		<span class="keyword">long</span> blockSize = stat.getBlockSize();</span><br><span class="line">		<span class="keyword">long</span> totalBlocks = stat.getBlockCount();</span><br><span class="line">		<span class="keyword">long</span> availableBlocks = stat.getAvailableBlocks();</span><br><span class="line">		<span class="keyword">long</span> totalSize = blockSize*totalBlocks;</span><br><span class="line">		<span class="keyword">long</span> availSize = blockSize * availableBlocks;</span><br><span class="line">		</span><br><span class="line">		String totalStr = Formatter.formatFileSize(<span class="keyword">this</span>,totalSize);</span><br><span class="line">		String availStr = Formatter.formatFileSize(<span class="keyword">this</span>, availSize);</span><br><span class="line">		tv.setText(<span class="string">"总空间"</span>+totalStr+<span class="string">"\n"</span>+<span class="string">"可用空间"</span>+availStr);</span><br></pre></td></tr></table></figure>
+<p>加入写外部存储的权限：</p>
+<p><strong>\<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission></strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">save</span><span class="params">(String name ,String password)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line"><span class="keyword">if</span> (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))&#123;</span><br><span class="line">File file = <span class="keyword">new</span> File(Environment.getExternalStorageDirectory(),<span class="string">"info.txt"</span>);</span><br><span class="line"><span class="comment">//也可直接写/sdcard/info.txt 先判断sd卡是否存在</span></span><br><span class="line">		FileOutputStream fos = <span class="keyword">new</span> FileOutputStream(file);</span><br><span class="line">		String txt = name+<span class="string">":"</span>+password;</span><br><span class="line">		fos.write(txt.getBytes());</span><br><span class="line">		fos.flush();</span><br><span class="line">		fos.close();</span><br><span class="line"><span class="comment">// 使用RandomAccessFile像文件追加内容FileOutputStream会把原有的文件内容清空</span></span><br><span class="line"><span class="comment">//RandomAccessFile raf = new RandomAccessFile(file,"rw");</span></span><br><span class="line"><span class="comment">//raf.seek(file.length());  将文件指针移动到最后</span></span><br><span class="line"><span class="comment">//raf.write(name.getBytes()+password.getBytes());</span></span><br><span class="line"><span class="comment">//raf.close();</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//读取文件 加入读取权限</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">read</span><span class="params">()</span></span>&#123;</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				<span class="keyword">if</span> (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))&#123;</span><br><span class="line">					File sdcardDir = Environment.getExternalStorageDirectory();</span><br><span class="line">					FileInputStream fis = <span class="keyword">new</span> FileInputStream(sdcardDir.getCanonicalPath() + <span class="string">"info.txt"</span>);</span><br><span class="line">					BufferedReader br = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(fis));</span><br><span class="line">					StringBuilder sb = <span class="keyword">new</span> StringBuilder(<span class="string">""</span>);</span><br><span class="line">					String line = <span class="keyword">null</span>;</span><br><span class="line">					<span class="keyword">while</span> ((line = br.readLine())!= <span class="keyword">null</span>)&#123;</span><br><span class="line">						sb.append(line);</span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">return</span> sb.toString();</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;  <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">				</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">		&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="u4E09_u3001Sharedpreferences_u7684_u4F7F_u7528"><a href="#u4E09_u3001Sharedpreferences_u7684_u4F7F_u7528" class="headerlink" title="三、Sharedpreferences的使用"></a>三、Sharedpreferences的使用</h3><blockquote>
+<p>SharedPreference是开发中常用的一种存储方式，主要存储一些系统不变的参数如是否是第一次进入应用程序等，通过键值对的方式进行存储</p>
+</blockquote>
+<p><strong>可以存储的类型：booleans, floats, ints, longs,strings.</strong></p>
+<ul>
+<li>getSharedPreferences() - 存储多个参数</li>
+<li>getPreferences() - 仅存储一个参数并且不需要指定名字（key）</li>
+</ul>
+<p><strong>写入的步骤：</strong></p>
+<ol>
+<li>SharedPreferences调用edit（）得到一个Editor对象</li>
+<li>使用 putBoolean() and putString()添加值</li>
+<li>提交事务完成存储</li>
+</ol>
+<p><strong>读取时：只需要调用SharedPreferences的getBoolean() and getString()</strong></p>
+<p>下面是示例代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class MySharedPreference &#123;&#10;&#9;private Context context;&#10;&#9;private SharedPreferences sp ;&#10;&#9;private Editor edit;&#10;&#9;public MySharedPreference(Context context)&#123;&#10;&#9;&#9;this.context = context;&#10;&#9;&#125;&#10;&#9;public boolean saveMessage(String name,String pwd)&#123;&#10;&#9;&#9;boolean flag = false;&#10;&#9;&#9; sp = context.getSharedPreferences(&#34;userInfo&#34;,Context.MODE_PRIVATE);&#10;         //MODE&#23450;&#20041;&#20102;&#35775;&#38382;&#30340;&#26435;&#38480;&#29616;&#22312;&#26159;&#26412;&#24212;&#29992;&#21487;&#20197;&#35775;&#38382;&#10;&#9;&#9;edit = sp.edit();&#10;&#9;&#9;edit.putString(&#34;name&#34;, name);&#10;&#9;&#9;edit.putString(&#34;pwd&#34;, pwd);&#10;&#9;&#9;flag = edit.commit();//&#25552;&#20132;&#20107;&#21153;&#23558;&#25968;&#25454;&#25345;&#20037;&#21270;&#21040;&#23384;&#20648;&#22120;&#20013;&#10;&#9;&#9;return flag;&#10;&#9;&#9;&#10;&#9;&#125;&#10;&#9;public Map&#60;String,Object&#62; getMessage()&#123;&#10;&#9;&#9;Map&#60;String,Object&#62; map = new HashMap&#60;String, Object&#62;();&#10;&#9;&#9;sp = context.getSharedPreferences(&#34;userInfo&#34;, Context.MODE_PRIVATE);&#10;&#9;&#9;String name = sp.getString(&#34;name&#34;, &#34;&#34;);&#10;&#9;&#9;String pwd = sp.getString(&#34;pwd&#34;, &#34;&#34;);&#10;&#9;&#9;map.put(&#34;name&#34;, name);&#10;&#9;&#9;map.put(&#34;pwd&#34;,pwd);&#10;&#9;&#9;return map;&#10;&#9;&#9;&#10;&#9;&#125;&#10;&#10;&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Android中Junit测试、XML的序列化与解析" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/14/Android中Junit测试、XML的序列化与解析/" class="article-date">
+  	<time datetime="2016-05-14T08:00:55.000Z" itemprop="datePublished">2016-05-14</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/05/14/Android中Junit测试、XML的序列化与解析/">Android中Junit测试、XML的序列化与解析</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Android_u4E2DJunit_u6D4B_u8BD5_u3001XML_u7684_u5E8F_u5217_u5316_u4E0E_u89E3_u6790"><a href="#Android_u4E2DJunit_u6D4B_u8BD5_u3001XML_u7684_u5E8F_u5217_u5316_u4E0E_u89E3_u6790" class="headerlink" title="Android中Junit测试、XML的序列化与解析"></a>Android中Junit测试、XML的序列化与解析</h1><h3 id="u4E00_u3001_u5173_u4E8EJunit_u6D4B_u8BD5"><a href="#u4E00_u3001_u5173_u4E8EJunit_u6D4B_u8BD5" class="headerlink" title="一、关于Junit测试"></a>一、关于Junit测试</h3><p>首先需要在manifest.xml中配置，在<strong>manifest节点</strong>下指定以下信息其中targetPacketage是你想要测试的项目的包名</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;!--     &#25351;&#23450;&#27979;&#35797;&#20449;&#24687;&#21644;&#35201;&#27979;&#35797;&#30340;&#21253; --&#62;&#10; &#60;instrumentation&#10;     android:name=&#34;android.test.InstrumentationTestRunner&#34;&#10;     android:targetPackage=&#34;com.itheima28.junittest&#34; &#62;&#10; &#60;/instrumentation&#62;</span><br></pre></td></tr></table></figure>
+<p>在<strong>application节点</strong>下加入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;!--         &#25351;&#23450;&#24341;&#29992;&#30340;&#27979;&#35797;&#21253; --&#62;&#10; &#60;uses-library android:name=&#34;android.test.runner&#34; /&#62;</span><br></pre></td></tr></table></figure>
+<p>使用时直接继承AndroidTestCase即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class TestCase extends AndroidTestCase &#123;&#10;&#10;&#9;public void test() &#123;&#10;            &#12290;&#12290;&#12290;&#12290;&#10;       &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="u4E8C_u3001_u4F7F_u7528XmlSerializer_u7C7B_u5E8F_u5217_u5316XML"><a href="#u4E8C_u3001_u4F7F_u7528XmlSerializer_u7C7B_u5E8F_u5217_u5316XML" class="headerlink" title="二、使用XmlSerializer类序列化XML"></a>二、使用XmlSerializer类序列化XML</h3><blockquote>
+<p>XmlSerializer主要是以数据流的形式序列化XML而它是一个接口无法直接实例化，需要通过一个静态方法Xml.newSerializer获取对象</p>
+</blockquote>
+<p><strong>下面是一些常用的方法</strong></p>
+<ul>
+<li>startDocument(String,boolean)：第一个参数设置文档的编码格式，第二个参数设置是否是一个独立的文档，一般设置为true。</li>
+<li>endDocument()：标记XML文档的结束，XML文档标签均为成对出现，有始有终。</li>
+<li>startTag(String,String)：一个XML标签的开始，第一个参数为命名空间，一般为null即可，第二个参数为标签名。</li>
+<li>endTag(String,String)：一个XML标签的结束，第一个参数为命名空间，一般为null即可，第二个参数为标签名，有始有终。</li>
+<li>attribute(String,String,String)：设置一个标签的属性，第一个参数为命名空间，第二个参数是属性名，第三个参数为属性值。</li>
+<li>text(String/…)：设置标签的值</li>
+</ul>
+<p><strong>下面是一个实例</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestCase</span> <span class="keyword">extends</span> <span class="title">AndroidTestCase</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line"><span class="comment">//		writeXmlToLocal();</span></span><br><span class="line">		</span><br><span class="line">		List&lt;Person&gt; personList = parserXmlFromLocal();</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span> (Person person : personList) &#123;</span><br><span class="line">			Log.i(<span class="string">"TestCase"</span>, person.toString());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/**</span><br><span class="line">	 * 写xml文件到本地</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">writeXmlToLocal</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		List&lt;Person&gt; personList = getPersonList();</span><br><span class="line">		</span><br><span class="line">		<span class="comment">// 获得序列化对象</span></span><br><span class="line">		XmlSerializer serializer = Xml.newSerializer();</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			File path = <span class="keyword">new</span> File(Environment.getExternalStorageDirectory(), <span class="string">"persons.xml"</span>);</span><br><span class="line">			FileOutputStream fos = <span class="keyword">new</span> FileOutputStream(path);</span><br><span class="line">			<span class="comment">// 指定序列化对象输出的位置和编码</span></span><br><span class="line">			serializer.setOutput(fos, <span class="string">"utf-8"</span>);</span><br><span class="line">			</span><br><span class="line">			serializer.startDocument(<span class="string">"utf-8"</span>, <span class="keyword">true</span>);	<span class="comment">// 写开始 &lt;?xml version='1.0' encoding='utf-8' standalone='yes' ?&gt;</span></span><br><span class="line">			</span><br><span class="line">			serializer.startTag(<span class="keyword">null</span>, <span class="string">"persons"</span>);		<span class="comment">// &lt;persons&gt;</span></span><br><span class="line">			</span><br><span class="line">			<span class="keyword">for</span> (Person person : personList) &#123;</span><br><span class="line">				<span class="comment">// 开始写人</span></span><br><span class="line"></span><br><span class="line">				serializer.startTag(<span class="keyword">null</span>, <span class="string">"person"</span>);	<span class="comment">// &lt;person&gt;</span></span><br><span class="line">				serializer.attribute(<span class="keyword">null</span>, <span class="string">"id"</span>, String.valueOf(person.getId()));</span><br><span class="line">				</span><br><span class="line">				<span class="comment">// 写名字</span></span><br><span class="line">				serializer.startTag(<span class="keyword">null</span>, <span class="string">"name"</span>);		<span class="comment">// &lt;name&gt;</span></span><br><span class="line">				serializer.text(person.getName());</span><br><span class="line">				serializer.endTag(<span class="keyword">null</span>, <span class="string">"name"</span>);		<span class="comment">// &lt;/name&gt;</span></span><br><span class="line">				</span><br><span class="line">				<span class="comment">// 写年龄</span></span><br><span class="line">				serializer.startTag(<span class="keyword">null</span>, <span class="string">"age"</span>);		<span class="comment">// &lt;age&gt;</span></span><br><span class="line">				serializer.text(String.valueOf(person.getAge()));</span><br><span class="line">				serializer.endTag(<span class="keyword">null</span>, <span class="string">"age"</span>);		<span class="comment">// &lt;/age&gt;</span></span><br><span class="line">				</span><br><span class="line">				serializer.endTag(<span class="keyword">null</span>, <span class="string">"person"</span>);	<span class="comment">// &lt;/person&gt;</span></span><br><span class="line">			&#125;</span><br><span class="line">			</span><br><span class="line">			serializer.endTag(<span class="keyword">null</span>, <span class="string">"persons"</span>);			<span class="comment">// &lt;/persons&gt;</span></span><br><span class="line">			</span><br><span class="line">			serializer.endDocument();		<span class="comment">// 结束</span></span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">private</span> List&lt;Person&gt; <span class="title">getPersonList</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		List&lt;Person&gt; personList = <span class="keyword">new</span> ArrayList&lt;Person&gt;();</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">30</span>; i++) &#123;</span><br><span class="line">			personList.add(<span class="keyword">new</span> Person(i, <span class="string">"wang"</span> + i, <span class="number">18</span> + i));</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> personList;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="u4E09_u3001_u4F7F_u7528pull_u89E3_u6790XML"><a href="#u4E09_u3001_u4F7F_u7528pull_u89E3_u6790XML" class="headerlink" title="三、使用pull解析XML"></a>三、使用pull解析XML</h3><blockquote>
+<p>PULL解析器的运行方式和SAX解析器很相似，都是事件触发机制。如开始元素和结束元素，使用parser.next()可以进行下一个元素并触发相应的事件，事件作为代码被发送，返回值是数字，因此可以用一个switch语句来对事件进行选择，然后进行相应的处理，当开始解析元素的时候，调用parser.nextText()方法可以获得下一个Text类型的元素。</p>
+</blockquote>
+<p><strong>常用属性</strong></p>
+<ul>
+<li>START_DOCUMENT</li>
+<li>START_TAG</li>
+<li>TEXT</li>
+<li>END_TAG</li>
+<li>END_DOCUMENT</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private List&#60;Person&#62; parserXmlFromLocal() &#123;&#10;&#9;&#9;try &#123;&#10;&#9;&#9;&#9;File path = new File(Environment.getExternalStorageDirectory(), &#34;persons.xml&#34;);&#10;&#9;&#9;&#9;FileInputStream fis = new FileInputStream(path);&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;// &#33719;&#24471;pull&#35299;&#26512;&#22120;&#23545;&#35937;&#10;&#9;&#9;&#9;XmlPullParser parser = Xml.newPullParser();&#10;&#9;&#9;&#9;// &#25351;&#23450;&#35299;&#26512;&#30340;&#25991;&#20214;&#21644;&#32534;&#30721;&#26684;&#24335;&#10;&#9;&#9;&#9;parser.setInput(fis, &#34;utf-8&#34;);&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;int eventType = parser.getEventType(); &#9;&#9;// &#33719;&#24471;&#20107;&#20214;&#31867;&#22411;&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;List&#60;Person&#62; personList = null;&#10;&#9;&#9;&#9;Person person = null;&#10;&#9;&#9;&#9;String id;&#10;&#9;&#9;&#9;while(eventType != XmlPullParser.END_DOCUMENT) &#123;&#10;&#9;&#9;&#9;&#9;String tagName = parser.getName();&#9;// &#33719;&#24471;&#24403;&#21069;&#33410;&#28857;&#30340;&#21517;&#31216;&#10;&#9;&#9;&#9;&#9;&#10;&#9;&#9;&#9;&#9;switch (eventType) &#123;&#10;&#9;&#9;&#9;&#9;case XmlPullParser.START_TAG: // &#24403;&#21069;&#31561;&#20110;&#24320;&#22987;&#33410;&#28857;  &#60;person&#62;&#10;&#9;&#9;&#9;&#9;&#9;if(&#34;persons&#34;.equals(tagName)) &#123;&#9;// &#60;persons&#62;&#10;&#9;&#9;&#9;&#9;&#9;&#9;personList = new ArrayList&#60;Person&#62;();&#10;&#9;&#9;&#9;&#9;&#9;&#125; else if(&#34;person&#34;.equals(tagName)) &#123; // &#60;person id=&#34;1&#34;&#62;&#10;&#9;&#9;&#9;&#9;&#9;&#9;person = new Person();&#10;&#9;&#9;&#9;&#9;&#9;&#9;id = parser.getAttributeValue(null, &#34;id&#34;);&#10;&#9;&#9;&#9;&#9;&#9;&#9;person.setId(Integer.valueOf(id));&#10;&#9;&#9;&#9;&#9;&#9;&#125; else if(&#34;name&#34;.equals(tagName)) &#123; // &#60;name&#62;&#10;&#9;&#9;&#9;&#9;&#9;&#9;person.setName(parser.nextText());&#10;&#9;&#9;&#9;&#9;&#9;&#125; else if(&#34;age&#34;.equals(tagName)) &#123; // &#60;age&#62;&#10;&#9;&#9;&#9;&#9;&#9;&#9;person.setAge(Integer.parseInt(parser.nextText()));&#10;&#9;&#9;&#9;&#9;&#9;&#125;&#10;&#9;&#9;&#9;&#9;&#9;break;&#10;&#9;&#9;&#9;&#9;case XmlPullParser.END_TAG:&#9;&#9;// &#60;/persons&#62;&#10;&#9;&#9;&#9;&#9;&#9;if(&#34;person&#34;.equals(tagName)) &#123;&#10;&#9;&#9;&#9;&#9;&#9;&#9;// &#38656;&#35201;&#25226;&#19978;&#38754;&#35774;&#32622;&#22909;&#20540;&#30340;person&#23545;&#35937;&#28155;&#21152;&#21040;&#38598;&#21512;&#20013;&#10;&#9;&#9;&#9;&#9;&#9;&#9;personList.add(person);&#10;&#9;&#9;&#9;&#9;&#9;&#125;&#10;&#9;&#9;&#9;&#9;&#9;break;&#10;&#9;&#9;&#9;&#9;default:&#10;&#9;&#9;&#9;&#9;&#9;break;&#10;&#9;&#9;&#9;&#9;&#125;&#10;&#9;&#9;&#9;&#9;&#10;&#9;&#9;&#9;&#9;eventType = parser.next();&#9;&#9;// &#33719;&#24471;&#19979;&#19968;&#20010;&#20107;&#20214;&#31867;&#22411;&#10;&#9;&#9;&#9;&#125;&#10;&#9;&#9;&#9;return personList;&#10;&#9;&#9;&#125; catch (Exception e) &#123;&#10;&#9;&#9;&#9;e.printStackTrace();&#10;&#9;&#9;&#125;&#10;&#9;&#9;return null;&#10;&#9;&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Fragment的基本使用方法与通信" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/14/Fragment的基本使用方法与通信/" class="article-date">
+  	<time datetime="2016-05-14T07:58:48.000Z" itemprop="datePublished">2016-05-14</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/05/14/Fragment的基本使用方法与通信/">Fragment的基本使用方法与通信</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Fragment_u7684_u57FA_u672C_u4F7F_u7528_u65B9_u6CD5_u4E0E_u901A_u4FE1"><a href="#Fragment_u7684_u57FA_u672C_u4F7F_u7528_u65B9_u6CD5_u4E0E_u901A_u4FE1" class="headerlink" title="Fragment的基本使用方法与通信"></a>Fragment的基本使用方法与通信</h2><h3 id="u4E00_u3001Fragment_u77E5_u8BC6_u6982_u8981"><a href="#u4E00_u3001Fragment_u77E5_u8BC6_u6982_u8981" class="headerlink" title="一、Fragment知识概要"></a>一、Fragment知识概要</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1. Fragment&#21487;&#20197;&#20316;&#20026;Activity&#30028;&#38754;&#30340;&#19968;&#37096;&#20998;&#20986;&#29616;&#10;2. &#21487;&#20197;&#22312;&#19968;&#20010;Activity&#20013;&#21516;&#26102;&#26970;&#32724;&#22810;&#20010;Fragment&#65292;&#24182;&#19988;&#19968;&#20010;Fragment&#20063;&#21487;&#20197;&#22312;&#22810;&#20010;Activity&#20013;&#20351;&#29992;&#10;3. &#22312;Activity&#36816;&#34892;&#36807;&#31243;&#20013;&#21487;&#20197;&#28155;&#21152;&#12289;&#31227;&#38500;&#25110;&#26367;&#25442;Fragment&#10;4. Fragment&#21487;&#20197;&#30456;&#24212;&#33258;&#24049;&#30340;&#36755;&#20837;&#20107;&#20214;&#65292;&#24182;&#19988;&#26377;&#33258;&#24049;&#30340;&#29983;&#21629;&#21608;&#26399;&#24182;&#19988;&#23427;&#30340;&#29983;&#21629;&#21608;&#26399;&#21463;&#23487;&#20027;Activity&#30340;&#24433;&#21709;</span><br></pre></td></tr></table></figure>
+<h3 id="u4E8C_u3001Fragment_u7684_u9759_u6001_u52A0_u8F7D"><a href="#u4E8C_u3001Fragment_u7684_u9759_u6001_u52A0_u8F7D" class="headerlink" title="二、Fragment的静态加载"></a>二、Fragment的静态加载</h3><blockquote>
+<p><strong>要导入v4的包以便向下兼容</strong></p>
+<p>import android.support.v4.app.Fragment;</p>
+</blockquote>
+<p><strong> 在Activity的layout文件中声明Fragment，需要特别注意fragment标签中的android:name属性指定了在layout中实例化的Fragment类</strong></p>
+<blockquote>
+<p>缺点：布局写死了使用不灵活</p>
+</blockquote>
+<p>（1） 定义一个布局并创建Fragment类（布局代码就不给出来了很简单一个TextView一个Button）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class MyFragment extends Fragment &#123;&#10;&#9;private String text1;&#10;&#9;public String getText1() &#123;&#10;&#9;&#9;return text1;&#10;&#9;&#125;&#10;&#9;public void setText1(String text1) &#123;&#10;&#9;&#9;this.text1 = text1;&#10;&#9;&#125;&#10;&#9;@Override&#10;&#9;public View onCreateView(LayoutInflater inflater, ViewGroup container,&#10;&#9;&#9;&#9;Bundle savedInstanceState) &#123;&#10;&#9;&#9;/**&#10;&#9;&#9; * resource:Fragment&#38656;&#35201;&#21152;&#36733;&#30340;&#24067;&#23616;&#10;&#9;&#9; * root&#65306;&#21152;&#36733;layout&#30340;&#29238;ViewGroup&#10;&#9;&#9; * attachToRoot&#65306;false&#19981;&#21453;&#22238;&#29238;ViewGroup&#10;&#9;&#9; */&#10;&#9;&#9;View view = inflater.inflate(R.layout.fragment,container, false);//&#25226;layout&#24067;&#23616;&#25991;&#20214;&#36716;&#25442;&#25104;View&#23545;&#35937; &#10;&#9;&#9;TextView textView = (TextView) view.findViewById(R.id.textView1);&#10;&#9;&#9;Button button = (Button) view.findViewById(R.id.button1);&#10;&#9;&#9;button.setText(&#34;&#33719;&#21462;&#20869;&#23481;&#34;);&#10;&#9;&#9;button.setOnClickListener(new OnClickListener() &#123;&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;@Override&#10;&#9;&#9;&#9;public void onClick(View v) &#123;&#10;&#9;&#9;&#9;&#9;String value = getText1();&#10;&#9;&#9;&#9;&#9;Toast.makeText(getActivity(), &#34;value&#34;+value, 0).show();&#10;&#9;&#9;&#9;&#9;&#10;&#9;&#9;&#9;&#125;&#10;&#9;&#9;&#125;);&#10;&#9;&#9;return view;&#10;&#9;&#125;&#10;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>（2） 在布局文件中声明Fragment</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&#62;&#10;&#60;LinearLayout xmlns:android=&#34;http://schemas.android.com/apk/res/android&#34;&#10;    android:layout_width=&#34;match_parent&#34;&#10;    android:layout_height=&#34;match_parent&#34;&#10;    android:orientation=&#34;vertical&#34; &#62;&#10;    &#60;fragment &#10;        android:id=&#34;@+id/fragment&#34;&#10;        android:layout_width=&#34;wrap_content&#34;&#10;        android:layout_height=&#34;wrap_content&#34;&#10;        android:name=&#34;com.example.fragment.MyFragment&#34;&#10;        /&#62;&#10;    &#10;&#10;&#60;/LinearLayout&#62;</span><br></pre></td></tr></table></figure>
+<p>（3） 在Activity中使用该Fragment</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class MainActivity2 extends Activity &#123;&#10;&#9;private TextView tv;&#10;&#9;@Override&#10;&#9;protected void onCreate(Bundle savedInstanceState) &#123;&#10;&#9;&#9;&#10;&#9;&#9;super.onCreate(savedInstanceState);&#10;&#9;&#9;setContentView(R.layout.main2);//&#24050;&#32463;&#21152;&#36733;fragment&#20013;&#30340;&#24067;&#23616;&#25991;&#20214;&#21487;&#20197;&#30452;&#25509;findViewById&#23427;&#37324;&#38754;&#30340;&#25511;&#20214;&#10;&#9;&#9;Button button = (Button) findViewById(R.id.button1);&#10;&#9;&#9;tv = (TextView) findViewById(R.id.textView1);&#10;&#9;&#9;button.setOnClickListener(new OnClickListener() &#123;&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;@Override&#10;&#9;&#9;&#9;public void onClick(View v) &#123;&#10;&#9;&#9;&#9;&#9;tv.setText(&#34;textview&#25913;&#21464;&#20102;&#65281;&#34;);&#10;&#9;&#9;&#9;&#9;&#10;&#9;&#9;&#9;&#125;&#10;&#9;&#9;&#125;);&#10;&#9;&#125;&#10;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="u4E09_u3001Fragment_u7684_u52A8_u6001_u52A0_u8F7D"><a href="#u4E09_u3001Fragment_u7684_u52A8_u6001_u52A0_u8F7D" class="headerlink" title="三、Fragment的动态加载"></a>三、Fragment的动态加载</h3><blockquote>
+<p>优点：运行时Activity允许动态的移除或者替换Fragment</p>
+</blockquote>
+<p><strong>Fragment事务：</strong>根据用户的交互情况，对Fragment进行添加、移除、替换、以及执行其他动作，提交给Activity的每一套变化被称作一个事务。每一个事务都是同时执行一套变化，可以在一个事务中设置你想执行的变化，包括add()、remove()、replace()，然后提交给Activity，<strong>必须调用commit()方法</strong>。如果允许用户通过back键退回到前一个Fragment状态，调用commit()之前可以加入addToBackStack()方法。</p>
+<p><strong>注意:</strong>Activity动态的添加Fragment必需有一个容器View来容纳Fragment的layout布局</p>
+<p>创建两个Fragment类（如上所示就不给出示例代码了）接下来就可以在Fragment中动态加载了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class MainActivity3 extends Activity &#123;&#10;&#9;private Button button;&#10;&#9;private Fragment fragment;&#10;&#9;private boolean flag = true;&#10;&#9;@Override&#10;&#9;protected void onCreate(Bundle savedInstanceState) &#123;&#9;&#9;&#10;&#9;&#9;super.onCreate(savedInstanceState);&#10;&#9;&#9;setContentView(R.layout.main3);&#10;&#9;&#9;init();&#10;&#9;&#9;button = (Button) findViewById(R.id.button);&#10;&#9;&#9;button.setOnClickListener(new OnClickListener() &#123;&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;@Override&#10;&#9;&#9;&#9;public void onClick(View v) &#123;&#10;&#9;&#9;&#9;&#9;FragmentManager manager = getFragmentManager();&#10;&#9;&#9;&#9;&#9;FragmentTransaction fragmentTransaction = manager.beginTransaction();&#10;&#9;&#9;&#9;&#9;if (flag) &#123;&#10;&#9;&#9;&#9;&#9;&#9;MyFragment4 fragment4 = new MyFragment4();&#10;                                           //containerViewId ,fragment &#10;    &#9;&#9;&#9;&#9;&#9;fragmentTransaction.replace(R.id.layout, fragment4);&#10;&#9;&#9;&#9;&#9;&#9;flag = false;&#10;&#9;&#9;&#9;&#9;&#125;else&#123;&#10;&#9;&#9;&#9;&#9;&#9;MyFragment3 fragment3 = new MyFragment3();&#10;&#9;&#9;&#9;&#9;&#9;fragmentTransaction.replace(R.id.layout, fragment3);&#10;&#9;&#9;&#9;&#9;&#9;flag = true;&#10;&#9;&#9;&#9;&#9;&#125;&#10;&#9;&#9;&#9;&#9;fragmentTransaction.commit();&#10;&#9;&#9;&#9;&#125;&#10;&#9;&#9;&#125;);&#10;&#9;&#125;&#10;&#9;public void init()&#123;&#10;&#9;&#9;FragmentManager manager = getFragmentManager();&#10;&#9;&#9;FragmentTransaction fragmentTransaction = manager.beginTransaction();&#10;&#9;&#9;MyFragment3 fragment3 = new MyFragment3();&#10;&#9;&#9;fragmentTransaction.add(R.id.layout, fragment3);&#10;&#9;&#9;fragmentTransaction.commit();&#10;&#9;&#125;&#10;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="u56DB_u3001Fragment_u7684_u901A_u4FE1"><a href="#u56DB_u3001Fragment_u7684_u901A_u4FE1" class="headerlink" title="四、Fragment的通信"></a>四、Fragment的通信</h3><h4 id="1-_u52A8_u6001_u52A0_u8F7D_u7684Fragment_u901A_u4FE1"><a href="#1-_u52A8_u6001_u52A0_u8F7D_u7684Fragment_u901A_u4FE1" class="headerlink" title="1.动态加载的Fragment通信"></a>1.动态加载的Fragment通信</h4><blockquote>
+<p>fragment之间永远不能通信都是通过他们所依附的Activity来通信的，通过接口回调的方式来通信</p>
+</blockquote>
+<p><strong>Activity—&gt;Fragment:</strong>在activity中创建Bundle数据包，并调用fragment的setArguments(Bundle bundle)方法</p>
+<p><strong>fragment—&gt;Activity:</strong>在fragment类中定义一个接口，并在他所属的activity中实现该接口，fragment在他的onAttach()方法执行期间捕获该接口的实现，然后就可以调用该接口方法，以便跟activity通信。</p>
+<p><strong>下面的代码实现了在一个Activity下有两个Fragment，在一个Fragment中输入值在另一个Fragment显示</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class MainActivity extends Activity implements MyListener &#123;&#10;&#9;@Override&#10;&#9;protected void onCreate(Bundle savedInstanceState) &#123;&#10;&#9;&#9;super.onCreate(savedInstanceState);&#10;&#9;&#9;setContentView(R.layout.activity_main);&#10;&#9;&#9;FragmentManager manager = getFragmentManager();&#10;&#9;&#9;FragmentTransaction fragmentTransaction = manager.beginTransaction();&#10;&#9;&#9;Fragment1 fragment1 = new Fragment1();&#10;&#9;&#9;fragmentTransaction.add(R.id.layout1, fragment1);&#10;&#9;&#9;fragmentTransaction.commit();&#10;&#10;&#9;&#125;&#10;       //&#22312;mainActivity&#20013;&#23454;&#29616;MyListener&#25509;&#21475;&#24182;&#23454;&#29616;&#23427;&#26410;&#23454;&#29616;&#30340;&#26041;&#27861;&#65292;&#22312;&#35813;&#26041;&#27861;&#20013;&#20256;&#36882;&#25968;&#25454;&#10;&#9;@Override&#10;&#9;public void send(String info) &#123;&#10;&#9;&#9;Toast.makeText(this, &#34;Activity&#25104;&#21151;&#25509;&#25910;&#34; + info, 0).show();&#9;&#9;&#10;&#9;&#9;Fragment2 fragment2 = new Fragment2();&#10;&#9;&#9;Bundle bundle = new Bundle();&#10;&#9;&#9;bundle.putString(&#34;name&#34;, info);&#10;&#9;&#9;fragment2.setArguments(bundle);&#10;&#9;&#9;FragmentManager manager = getFragmentManager();&#10;&#9;&#9;FragmentTransaction fragmentTransaction = manager.beginTransaction();&#10;        //&#26367;&#25442;&#35813;Fragment&#9;&#9;&#9;&#9;&#10;&#9;&#9;fragmentTransaction.replace(R.id.layout2, fragment2, &#34;fragment2&#34;);&#10;               &#10;&#9;&#9;fragmentTransaction.commit();&#10;&#9;&#125;&#10;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的MainActivity布局就是添加两个Linearlayout，下面是创建两个Fragment，Fragment1的布局就是一个EditText一个Button，Fragment2的布局就是一个TextView。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> public class Fragment1 extends Fragment &#123;&#10;&#9;EditText et;&#10;&#9;Button enter;&#10;&#9;private String info;&#10;&#9;@Override&#10;&#9;public void onAttach(Activity activity) &#123;&#10;&#9;&#9;listener = (MyListener) activity;&#10;&#9;&#9;super.onAttach(activity);&#10;&#9;&#125;&#10;&#9;@Override&#10;&#9;public View onCreateView(LayoutInflater inflater, ViewGroup container,&#10;&#9;&#9;&#9;Bundle savedInstanceState) &#123;&#10;&#9;&#9;&#10;&#9;&#9;View view = inflater.inflate(R.layout.fragment1_lay,container, false);&#10;&#9;&#9;et = (EditText) view.findViewById(R.id.et);&#10;&#9;&#9;enter = (Button) view.findViewById(R.id.enter);&#10;&#9;&#9;enter.setOnClickListener(new OnClickListener() &#123;&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;@Override&#10;&#9;&#9;&#9;public void onClick(View v) &#123;&#10;&#9;&#9;&#9;&#9;info = et.getText().toString();&#10;&#9;&#9;&#9;&#9;listener.send(info);&#10;&#9;&#9;&#9;&#9;&#10;&#9;&#9;&#9;&#125;&#10;&#9;&#9;&#125;);&#10;&#9;&#9;return view;&#10;&#9;&#125;&#10;&#9;public MyListener listener;&#10;        //&#23450;&#20041;&#19968;&#20010;&#25509;&#21475;&#10;&#9;public interface MyListener&#123; &#10;&#9;&#9;public void send(String info);&#10;&#9;&#125;&#10;&#9;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class Fragment2 extends Fragment &#123;&#10;&#10;&#9;@Override&#10;&#9;public View onCreateView(LayoutInflater inflater, ViewGroup container,&#10;&#9;&#9;&#9;Bundle savedInstanceState) &#123;&#10;&#9;&#9;View view = inflater.inflate(R.layout.fragment2_lay,container, false);&#10;&#9;&#9;TextView tv = (TextView) view.findViewById(R.id.tv);&#10;&#9;&#9;tv.setText(getArguments().get(&#34;name&#34;)+&#34;&#34;);//&#33719;&#21462;&#20256;&#36882;&#30340;&#20540;&#10;&#9;&#9;Toast.makeText(getActivity(), &#34;fragment&#34;+getArguments().get(&#34;name&#34;)+&#34;&#34;, 0).show();&#10;&#9;&#9;return view;&#10;&#9;&#125;&#10;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-_u9759_u6001_u52A0_u8F7D_u7684fragment_u901A_u4FE1"><a href="#2-_u9759_u6001_u52A0_u8F7D_u7684fragment_u901A_u4FE1" class="headerlink" title="2.静态加载的fragment通信"></a>2.静态加载的fragment通信</h4><ul>
+<li>fragment可以调用getActivity()方法获取他所在的Activity</li>
+<li>Activity可以调用FragmentManager的findFragmentById()或findFragmentByTag()方法获取Fragment</li>
+</ul>
+<p>如果是静态加载的Fragmentn那么向Activity传递数据就很简单了，在MainActivity的onCreate方法中:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">      FragmentManager fragmentManager = getFragmentManager();&#10;        Fragment fragment = fragmentManager.findFragmentById(R.id.frag);//&#38745;&#24577;&#21152;&#36733;&#22312;Activity&#24067;&#23616;&#20013;&#35774;&#32622;&#30340;Fragment&#30340;ID&#10;MyFragment frag = (MyFragment) fragment;&#10;frag.setText1(&#34;fragment&#38745;&#24577;&#20256;&#20540;&#34;);</span><br></pre></td></tr></table></figure>
+<p>在Fragment类中设置它的get、set方法，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private String text1;&#10;&#9;public String getText1() &#123;&#10;&#9;&#9;return text1;&#10;&#9;&#125;&#10;&#9;public void setText1(String text1) &#123;&#10;&#9;&#9;this.text1 = text1;&#10;&#9;&#125;</span><br></pre></td></tr></table></figure>
+<p>下面直接调用就可以了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String value = getText1();</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -264,8 +1446,8 @@
     <article id="post-快速理解javascript中的闭包" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/05/14/快速理解javascript中的闭包/" class="article-date">
-  	<time datetime="2016-05-14T07:39:46.000Z" itemprop="datePublished">2016-05-14</time>
+      <a href="/2016/03/14/快速理解javascript中的闭包/" class="article-date">
+  	<time datetime="2016-03-14T07:39:46.000Z" itemprop="datePublished">2016-03-14</time>
 </a>
     </div>
   
@@ -278,7 +1460,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/05/14/快速理解javascript中的闭包/">快速理解javascript中的闭包</a>
+      <a class="article-title" href="/2016/03/14/快速理解javascript中的闭包/">快速理解javascript中的闭包</a>
     </h1>
   
 
@@ -325,191 +1507,8 @@
     <div class="article-info article-info-index">
       
       
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-DOM事件流解析" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/02/24/DOM事件流解析/" class="article-date">
-  	<time datetime="2016-02-24T07:33:13.000Z" itemprop="datePublished">2016-02-24</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/02/24/DOM事件流解析/">DOM事件流解析</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="u4EC0_u4E48_u662F_u4E8B_u4EF6_u6D41_uFF1F"><a href="#u4EC0_u4E48_u662F_u4E8B_u4EF6_u6D41_uFF1F" class="headerlink" title="什么是事件流？"></a>什么是事件流？</h2><blockquote>
-<p>事件流：描述的就是从页面中接受事件的顺序。分有事件冒泡与事件捕获两种。</p>
-</blockquote>
-<h2 id="u4EC0_u4E48_u662F_u4E8B_u4EF6_u5192_u6CE1_uFF1F"><a href="#u4EC0_u4E48_u662F_u4E8B_u4EF6_u5192_u6CE1_uFF1F" class="headerlink" title="什么是事件冒泡？"></a>什么是事件冒泡？</h2><blockquote>
-<p>事件冒泡即事件开始时，由最具体的元素接收（也就是事件发生所在的节点），然后逐级传播到较为不具体的节点。</p>
-</blockquote>
-<h2 id="u4EC0_u4E48_u662F_u4E8B_u4EF6_u6355_u83B7_uFF1F"><a href="#u4EC0_u4E48_u662F_u4E8B_u4EF6_u6355_u83B7_uFF1F" class="headerlink" title="什么是事件捕获？"></a>什么是事件捕获？</h2><blockquote>
-<p>事件捕获的概念，与事件冒泡正好相反。它认为当某个事件发生时，父元素应该更早接收到事件，具体元素则最后接收到事件。</p>
-</blockquote>
-<p>明白了上面的三个概念基本上就弄懂了DOM的事件流了，下面来彻底明白事件流。</p>
-<h2 id="DOM_u4E8B_u4EF6_u6D41_u7684_u4E09_u4E2A_u9636_u6BB5_uFF1A"><a href="#DOM_u4E8B_u4EF6_u6D41_u7684_u4E09_u4E2A_u9636_u6BB5_uFF1A" class="headerlink" title="DOM事件流的三个阶段："></a>DOM事件流的三个阶段：</h2><ol>
-<li>事件捕获阶段（为截获事件提供了机会）</li>
-<li>处于目标阶段</li>
-<li>事件冒泡阶段（对事件作出响应）</li>
-</ol>
-<p>当一个DOM事件触发时，它不是在触发的对象上只触发一次的，而是经历上述的三个阶段，即开始从文档的根节点流向目标对象，然后在目标对向上被触发，之后再回溯到文档的根节点。</p>
-<p>来个实例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var button = document.getElementById(&#39;clickMe&#39;);&#10;&#10;button.onclick = function() &#123;&#10;&#160; console.log(&#39;1. You click Button&#39;);&#10;&#125;;&#10;document.body.onclick = function() &#123;&#10;&#160; console.log(&#39;2. You click body&#39;);&#10;&#125;;&#10;document.onclick = function() &#123;&#10;&#160; console.log(&#39;3. You click document&#39;);&#10;&#125;;&#10;window.onclick = function() &#123;&#10;&#160; console.log(&#39;4. You click window&#39;);&#10;&#125;;</span><br></pre></td></tr></table></figure>
-<p>把window点击事件更改为使用事件捕获模式</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">window.addEventListener(&#39;click&#39;, function() &#123;&#10;&#160; &#160;console.log(&#39;4. You click window&#39;);&#10;&#160;&#125;, true);//true&#20195;&#34920;&#20351;&#29992;&#20107;&#20214;&#25429;&#33719;&#27169;&#24335;&#65292;alse&#21017;&#34920;&#31034;&#20351;&#29992;&#20107;&#20214;&#20882;&#27873;&#27169;&#24335;</span><br></pre></td></tr></table></figure>
-<p>输出为4-&gt;1-&gt;2-&gt;3点击事件先被父元素截获了，且该函数只在事件捕获阶段起作用。</p>
-<p>阻止事件冒泡：<br>stopPropagation()防止事件冒泡而带来不必要的错误和困扰。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">button.addEventListener(&#39;click&#39;, function(event) &#123;&#10;&#160; &#160;// event&#20026;&#20107;&#20214;&#23545;&#35937;&#10;&#160; &#160;console.log(&#39;1. You click Button&#39;);&#10;&#160; &#160;event.stopPropagation();&#10;&#160; &#160;console.log(&#39;Stop Propagation!&#39;);&#10;&#160;&#125;, false);</span><br></pre></td></tr></table></figure>
-<p>输出为4-&gt;1，事件在到达具体元素后，停止了冒泡。但不影响父元素的事件捕获。</p>
-<p>本文参考：<strong><a href="http://www.cnblogs.com/LIUYANZUO/p/5332583.html" target="_blank" rel="external">http://www.cnblogs.com/LIUYANZUO/p/5332583.html</a></strong></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-success" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/02/13/success/" class="article-date">
-  	<time datetime="2016-02-13T11:36:23.000Z" itemprop="datePublished">2016-02-13</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/02/13/success/">CSS3中的媒体查询</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="u4E00_u3001_u4E3A_u4EC0_u4E48_u9700_u8981_u5A92_u4F53_u67E5_u8BE2"><a href="#u4E00_u3001_u4E3A_u4EC0_u4E48_u9700_u8981_u5A92_u4F53_u67E5_u8BE2" class="headerlink" title="一、为什么需要媒体查询"></a>一、为什么需要媒体查询</h3><p>CSS3的媒体查询模块就是为了针对设备特性（width、height等）设置特定的css样式，可以在不改变当前页面内容的情况下，为特定的一些设备定制显示效果。</p>
-<h3 id="u4E8C_u3001_u5A92_u4F53_u67E5_u8BE2_u8BED_u6CD5"><a href="#u4E8C_u3001_u5A92_u4F53_u67E5_u8BE2_u8BED_u6CD5" class="headerlink" title="二、媒体查询语法"></a>二、媒体查询语法</h3><p>1.媒体查询在一段CSS后引入特定样式</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="at_rule">@<span class="keyword">media</span> screen and (max-width:<span class="number">960px</span>)</span>&#123;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>2.使用 CSS 的@import 指令在当前样式表中按条件引入其他样式表</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="at_rule">@<span class="keyword">import</span> <span class="function">url</span>(<span class="string">"phone.css"</span>) screen and (max-width:<span class="number">360px</span>)</span>;</span><br></pre></td></tr></table></figure>
-<p>3.利用媒体查询引入特定的样式文件</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;link rel="stylesheet" media="screen and (orientation: portrait) and (min-width: 800px), projection" href="800wide-portrait-screen.css" /&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="u4E09_u3001_u5A92_u4F53_u67E5_u8BE2_u53EF_u68C0_u6D4B_u7684_u7279_u6027"><a href="#u4E09_u3001_u5A92_u4F53_u67E5_u8BE2_u53EF_u68C0_u6D4B_u7684_u7279_u6027" class="headerlink" title="三、媒体查询可检测的特性"></a>三、媒体查询可检测的特性</h3><ul>
-<li>width：视口宽度</li>
-<li>height：视口高度</li>
-<li>device-width：渲染表面的宽度(对我们来说,就是设备屏幕的宽度)</li>
-<li>device-height：渲染表面的高度(对我们来说,就是设备屏幕的高度)</li>
-<li>orientation：检查设备处于横向还是纵向</li>
-<li>aspect-ratio：基于视口宽度和高度的宽高比。一个 16∶9 比例的显示屏可以这样定义 aspect-ratio: 16/9</li>
-<li>device-aspect-ratio：和 aspect-ratio 类似,基于设备渲染平面宽度和高度的宽高比</li>
-<li>color:每种颜色的位数。例如 min-color: 16 会检测设备是否拥有 16 位颜色。 </li>
-<li>color-index:设备的颜色索引表中的颜色数。值必须是非负整数。 </li>
-<li>monochrome:检测单色帧缓冲区中每像素所使用的位数。值必须是非负整数,如<br>monochrome: 2</li>
-<li>resolution:用来检测屏幕或打印机的分辨率,如 min-resolution: 300dpi。还可以接受每厘米像素点数的度量值,如 min-resolution: 118dpcm。</li>
-<li>scan:电视机的扫描方式,值可设为 progressive(逐行扫描)或 interlace(隔行扫描)。如 720p HD 电视(720p 的 p 即表明是逐行扫描)匹配 scan: progressive,而 1080i HD 电视(1080i 中的 i 表明是隔行扫描)匹配 scan: interlace。 </li>
-<li>grid:用来检测输出设备是网格设备还是位图设备。</li>
-</ul>
-<blockquote>
-<p><strong>除 scan 和 grid 之外,都可使用 min 和 max 前缀来创建一个查询范围，如min-width:200px、max-width:360px。</strong></p>
-</blockquote>
-<h3 id="u56DB_u3001_u5229_u7528viewport_u7981_u6B62_u7528_u6237_u7F29_u653E"><a href="#u56DB_u3001_u5229_u7528viewport_u7981_u6B62_u7528_u6237_u7F29_u653E" class="headerlink" title="四、利用viewport禁止用户缩放"></a>四、利用viewport禁止用户缩放</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta name="viewport" content="width=device-width,initial-scale=1.0" /&gt;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p><strong>meta标签表示：强制让文档的宽度与设备的宽度保持1:1，并且文档最大的宽度比例是1.0，且不允许用户点击屏幕放大浏览； 尤其要注意的是content里多个属性的设置一定要用分号+空格来隔开，如果不规范将不会起作用。</strong></p>
-</blockquote>
-<ul>
-<li><p>width viewport 宽度(数值/device-width)</p>
-</li>
-<li><p>height viewport 高度(数值/device-height)</p>
-</li>
-<li><p>initial-scale 初始缩放比例</p>
-</li>
-<li><p>maximum-scale 最大缩放比例</p>
-</li>
-<li><p>minimum-scale 最小缩放比例</p>
-</li>
-<li><p>user-scalable 是否允许用户缩放(yes/no)</p>
-</li>
-<li><p>minimal-ui iOS 7.1 beta 2 中新增属性（注意：iOS8 中已经删除），可以在页面加载时最小化上下状态栏。</p>
-</li>
-</ul>
-<blockquote>
-<p><strong>注意：关于viewport，还有一个很重要的概念是：iphone 的safari 浏览器完全没有滚动条，而且不是简单的“隐藏滚动条”， 是根本没有这个功能。iphone 的safari 浏览器实际上从一开始就完整显示了这个网页，然后用viewport 查看其中的一部分。 当你用手指拖动时，其实拖的不是页面，而是viewport。浏览器行为的改变不止是滚动条，交互事件也跟普通桌面不一样。</strong></p>
-</blockquote>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta content="yes" name="apple-mobile-web-app-capable" /&gt;</span><br><span class="line">&lt;meta content="black" name="apple-mobile-web-app-status-bar-style" /&gt;</span><br><span class="line">&lt;meta content="telephone=no" name="format-detection" /&gt;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>第一个meta标签是iphone设备中的safari私有meta标签，它表示：允许全屏模式浏览； </li>
-<li>第二个meta标签也是iphone的私有标签，它指定的iphone中safari顶端的状态条的样式； </li>
-<li>第三个meta标签表示：告诉设备忽略将页面中的数字识别为电话号码</li>
-</ul>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/">css</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/">javascript</a></li></ul>
 	</div>
 
       
@@ -531,6 +1530,87 @@
 
 
   
+    <article id="post-快速理解javascript中的this" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/03/01/快速理解javascript中的this/" class="article-date">
+  	<time datetime="2016-03-01T07:41:11.000Z" itemprop="datePublished">2016-03-01</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/01/快速理解javascript中的this/">快速理解javascript中的this</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="http://7xpt6z.com1.z0.glb.clouddn.com/%E5%BF%AB%E9%80%9F%E7%90%86%E8%A7%A3javascript%E4%B8%AD%E7%9A%84this.png" alt="javascript中的this.png"></p>
+<h2 id="u4E00_u4E9B_u8BEF_u89E3"><a href="#u4E00_u4E9B_u8BEF_u89E3" class="headerlink" title="一些误解"></a>一些误解</h2><ol>
+<li>指向自身？（<em>并不是所有时候都指向自身</em>）</li>
+<li>作用域问题?（<em>this并不一定指向函数的作用域，并且在任何时候都不指向函数的词法作用域</em>）</li>
+<li>this到底是什么？（<em>this是运行时绑定的并不是在编写时绑定，他的上下文取决于函数调用时的各种条件和函数声明的位置没有任何关系，只取决于函数的调用方式</em>）</li>
+</ol>
+<h2 id="this_u7684_u6307_u5411"><a href="#this_u7684_u6307_u5411" class="headerlink" title="this的指向"></a>this的指向</h2><ol>
+<li>全局范围使用this和全局函数调用都指向全局对象(在严格模式下undefined)</li>
+<li>方法调用内this指向调用对象</li>
+<li>new绑定调用构造函数，在函数内部指向新创建的对象</li>
+<li>通过call、apply显式的的设置this对象，指向设置的对象</li>
+</ol>
+<h2 id="u5173_u4E8Ecall_u3001apply_u3001bind"><a href="#u5173_u4E8Ecall_u3001apply_u3001bind" class="headerlink" title="关于call、apply、bind"></a>关于call、apply、bind</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var links = document.querySelectorAll(&#39;nav li&#39;);&#10;&#10;for (var i = 0; i &#60; links.length; i++) &#123;&#10;&#10;console.log(this); // [object Window]&#125;</span><br></pre></td></tr></table></figure>
+<p>有时候我们需要根据实际的需求来变化代码的作用域，就需要<br>call、apply、bind动态的传入函数引用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var links = document.querySelectorAll(&#39;nav li&#39;);&#10;&#10;for (var i = 0; i &#60; links.length; i++) &#123;&#10;&#10;(function () &#123;&#10;&#10;console.log(this);&#10;&#10;&#125;).call(links[i]);&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>其中.call(scope, arg1, arg2, arg3)输入单个参数，而.apply(scope, [arg1, arg2])输入数组作为参数。在ES5中引入了bind方法，bind()并不触发函数，它仅仅是在函数触发前绑定值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nav.addEventListener(&#39;click&#39;, toggleNav.bind(scope, arg1, arg2), false);</span><br></pre></td></tr></table></figure>
+<p>在不需要调用的时候就可以传递参数，函数并没被触发，scope可以被改变，且参数在等着传递。</p>
+<h2 id="u5176_u5B83"><a href="#u5176_u5B83" class="headerlink" title="其它"></a>其它</h2><p>bind源码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">if(!(&#39;bind&#39; in Function.prototype))&#123;&#10;&#160;&#160;&#160;&#160;Function.prototype.bind = function()&#123;&#10;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;var fn = this, &#10;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;context = arguments[0], &#10;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;args = Array.prototype.slice.call(arguments, 1);&#10;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;return function()&#123;&#10;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;return fn.apply(context, args.concat(arguments));&#10;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#125;&#10;&#160;&#160;&#160;&#160;&#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>bind()方法通常被用在上下文丢失的场景下，例如面向对象和事件处理。之所以要这么做，是因为节点的addEventListener方法总是为事件处理器所绑定的节点的上下文中执行回调函数，这就是它应该表现的那样。但是，如果你想要使用高级的面向对象技术，或需要你的回调函数成为某个方法的实例，你将需要手动调整上下文。这就是bind方法所带来的便利之处。<br>bind源码中调用了Array的slice方法，我们知道arguments对象并不是一个真正的数组，而是一个类数组对象，虽然具有length属性，并且值也能够被索引，但是它们不支持原生的数组方法，例如slice和push。但是，由于它们具有和数组类似的行为，数组的方法能够被调用和劫持，因此我们可以通过类似于上面代码的方式达到这个目的，其核心是利用call方法。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/">javascript</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    </nav>
   
 </div>
       <footer id="footer">

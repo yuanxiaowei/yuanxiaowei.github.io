@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>Android中Junit测试、XML的序列化与解析 | victor_yuan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Android中Junit测试、XML的序列化与解析一、关于Junit测试首先需要在manifest.xml中配置，在manifest节点下指定以下信息其中targetPacketage是你想要测试的项目的包名
+1&amp;#60;!--     &amp;#25351;&amp;#23450;&amp;#27979;&amp;#35797;&amp;#20449;&amp;#24687;&amp;#21644;&amp;#35201;&amp;#27979;&amp;#35797;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android中Junit测试、XML的序列化与解析">
+<meta property="og:url" content="http://yoursite.com/2016/05/14/Android中Junit测试、XML的序列化与解析/index.html">
+<meta property="og:site_name" content="victor_yuan">
+<meta property="og:description" content="Android中Junit测试、XML的序列化与解析一、关于Junit测试首先需要在manifest.xml中配置，在manifest节点下指定以下信息其中targetPacketage是你想要测试的项目的包名
+1&amp;#60;!--     &amp;#25351;&amp;#23450;&amp;#27979;&amp;#35797;&amp;#20449;&amp;#24687;&amp;#21644;&amp;#35201;&amp;#27979;&amp;#35797;">
+<meta property="og:updated_time" content="2016-05-14T08:01:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android中Junit测试、XML的序列化与解析">
+<meta name="twitter:description" content="Android中Junit测试、XML的序列化与解析一、关于Junit测试首先需要在manifest.xml中配置，在manifest节点下指定以下信息其中targetPacketage是你想要测试的项目的包名
+1&amp;#60;!--     &amp;#25351;&amp;#23450;&amp;#27979;&amp;#35797;&amp;#20449;&amp;#24687;&amp;#21644;&amp;#35201;&amp;#27979;&amp;#35797;">
+  
+    <link rel="alternative" href="/atom.xml" title="victor_yuan" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://cl.ly/26350T2h1P0H/fav.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">victor_yuan</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>標籤</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>關於</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="/#" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+					        
+								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+					        
+								<a class="facebook" target="_blank" href="/#" title="facebook">facebook</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/android/" style="font-size: 20px;">android</a> <a href="/tags/css/" style="font-size: 10px;">css</a> <a href="/tags/javascript/" style="font-size: 15px;">javascript</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">奥巴马的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">victor_yuan</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="http://cl.ly/26350T2h1P0H/fav.jpg" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">victor_yuan</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="/#" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+			        
+						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+			        
+						<a class="facebook" target="_blank" href="/#" title="facebook">facebook</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-Android中Junit测试、XML的序列化与解析" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/14/Android中Junit测试、XML的序列化与解析/" class="article-date">
+  	<time datetime="2016-05-14T08:00:55.000Z" itemprop="datePublished">2016-05-14</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android中Junit测试、XML的序列化与解析
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Android_u4E2DJunit_u6D4B_u8BD5_u3001XML_u7684_u5E8F_u5217_u5316_u4E0E_u89E3_u6790"><a href="#Android_u4E2DJunit_u6D4B_u8BD5_u3001XML_u7684_u5E8F_u5217_u5316_u4E0E_u89E3_u6790" class="headerlink" title="Android中Junit测试、XML的序列化与解析"></a>Android中Junit测试、XML的序列化与解析</h1><h3 id="u4E00_u3001_u5173_u4E8EJunit_u6D4B_u8BD5"><a href="#u4E00_u3001_u5173_u4E8EJunit_u6D4B_u8BD5" class="headerlink" title="一、关于Junit测试"></a>一、关于Junit测试</h3><p>首先需要在manifest.xml中配置，在<strong>manifest节点</strong>下指定以下信息其中targetPacketage是你想要测试的项目的包名</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;!--     &#25351;&#23450;&#27979;&#35797;&#20449;&#24687;&#21644;&#35201;&#27979;&#35797;&#30340;&#21253; --&#62;&#10; &#60;instrumentation&#10;     android:name=&#34;android.test.InstrumentationTestRunner&#34;&#10;     android:targetPackage=&#34;com.itheima28.junittest&#34; &#62;&#10; &#60;/instrumentation&#62;</span><br></pre></td></tr></table></figure>
+<p>在<strong>application节点</strong>下加入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;!--         &#25351;&#23450;&#24341;&#29992;&#30340;&#27979;&#35797;&#21253; --&#62;&#10; &#60;uses-library android:name=&#34;android.test.runner&#34; /&#62;</span><br></pre></td></tr></table></figure>
+<p>使用时直接继承AndroidTestCase即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class TestCase extends AndroidTestCase &#123;&#10;&#10;&#9;public void test() &#123;&#10;            &#12290;&#12290;&#12290;&#12290;&#10;       &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="u4E8C_u3001_u4F7F_u7528XmlSerializer_u7C7B_u5E8F_u5217_u5316XML"><a href="#u4E8C_u3001_u4F7F_u7528XmlSerializer_u7C7B_u5E8F_u5217_u5316XML" class="headerlink" title="二、使用XmlSerializer类序列化XML"></a>二、使用XmlSerializer类序列化XML</h3><blockquote>
+<p>XmlSerializer主要是以数据流的形式序列化XML而它是一个接口无法直接实例化，需要通过一个静态方法Xml.newSerializer获取对象</p>
+</blockquote>
+<p><strong>下面是一些常用的方法</strong></p>
+<ul>
+<li>startDocument(String,boolean)：第一个参数设置文档的编码格式，第二个参数设置是否是一个独立的文档，一般设置为true。</li>
+<li>endDocument()：标记XML文档的结束，XML文档标签均为成对出现，有始有终。</li>
+<li>startTag(String,String)：一个XML标签的开始，第一个参数为命名空间，一般为null即可，第二个参数为标签名。</li>
+<li>endTag(String,String)：一个XML标签的结束，第一个参数为命名空间，一般为null即可，第二个参数为标签名，有始有终。</li>
+<li>attribute(String,String,String)：设置一个标签的属性，第一个参数为命名空间，第二个参数是属性名，第三个参数为属性值。</li>
+<li>text(String/…)：设置标签的值</li>
+</ul>
+<p><strong>下面是一个实例</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestCase</span> <span class="keyword">extends</span> <span class="title">AndroidTestCase</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line"><span class="comment">//		writeXmlToLocal();</span></span><br><span class="line">		</span><br><span class="line">		List&lt;Person&gt; personList = parserXmlFromLocal();</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span> (Person person : personList) &#123;</span><br><span class="line">			Log.i(<span class="string">"TestCase"</span>, person.toString());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/**</span><br><span class="line">	 * 写xml文件到本地</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">writeXmlToLocal</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		List&lt;Person&gt; personList = getPersonList();</span><br><span class="line">		</span><br><span class="line">		<span class="comment">// 获得序列化对象</span></span><br><span class="line">		XmlSerializer serializer = Xml.newSerializer();</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			File path = <span class="keyword">new</span> File(Environment.getExternalStorageDirectory(), <span class="string">"persons.xml"</span>);</span><br><span class="line">			FileOutputStream fos = <span class="keyword">new</span> FileOutputStream(path);</span><br><span class="line">			<span class="comment">// 指定序列化对象输出的位置和编码</span></span><br><span class="line">			serializer.setOutput(fos, <span class="string">"utf-8"</span>);</span><br><span class="line">			</span><br><span class="line">			serializer.startDocument(<span class="string">"utf-8"</span>, <span class="keyword">true</span>);	<span class="comment">// 写开始 &lt;?xml version='1.0' encoding='utf-8' standalone='yes' ?&gt;</span></span><br><span class="line">			</span><br><span class="line">			serializer.startTag(<span class="keyword">null</span>, <span class="string">"persons"</span>);		<span class="comment">// &lt;persons&gt;</span></span><br><span class="line">			</span><br><span class="line">			<span class="keyword">for</span> (Person person : personList) &#123;</span><br><span class="line">				<span class="comment">// 开始写人</span></span><br><span class="line"></span><br><span class="line">				serializer.startTag(<span class="keyword">null</span>, <span class="string">"person"</span>);	<span class="comment">// &lt;person&gt;</span></span><br><span class="line">				serializer.attribute(<span class="keyword">null</span>, <span class="string">"id"</span>, String.valueOf(person.getId()));</span><br><span class="line">				</span><br><span class="line">				<span class="comment">// 写名字</span></span><br><span class="line">				serializer.startTag(<span class="keyword">null</span>, <span class="string">"name"</span>);		<span class="comment">// &lt;name&gt;</span></span><br><span class="line">				serializer.text(person.getName());</span><br><span class="line">				serializer.endTag(<span class="keyword">null</span>, <span class="string">"name"</span>);		<span class="comment">// &lt;/name&gt;</span></span><br><span class="line">				</span><br><span class="line">				<span class="comment">// 写年龄</span></span><br><span class="line">				serializer.startTag(<span class="keyword">null</span>, <span class="string">"age"</span>);		<span class="comment">// &lt;age&gt;</span></span><br><span class="line">				serializer.text(String.valueOf(person.getAge()));</span><br><span class="line">				serializer.endTag(<span class="keyword">null</span>, <span class="string">"age"</span>);		<span class="comment">// &lt;/age&gt;</span></span><br><span class="line">				</span><br><span class="line">				serializer.endTag(<span class="keyword">null</span>, <span class="string">"person"</span>);	<span class="comment">// &lt;/person&gt;</span></span><br><span class="line">			&#125;</span><br><span class="line">			</span><br><span class="line">			serializer.endTag(<span class="keyword">null</span>, <span class="string">"persons"</span>);			<span class="comment">// &lt;/persons&gt;</span></span><br><span class="line">			</span><br><span class="line">			serializer.endDocument();		<span class="comment">// 结束</span></span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">private</span> List&lt;Person&gt; <span class="title">getPersonList</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		List&lt;Person&gt; personList = <span class="keyword">new</span> ArrayList&lt;Person&gt;();</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">30</span>; i++) &#123;</span><br><span class="line">			personList.add(<span class="keyword">new</span> Person(i, <span class="string">"wang"</span> + i, <span class="number">18</span> + i));</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> personList;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="u4E09_u3001_u4F7F_u7528pull_u89E3_u6790XML"><a href="#u4E09_u3001_u4F7F_u7528pull_u89E3_u6790XML" class="headerlink" title="三、使用pull解析XML"></a>三、使用pull解析XML</h3><blockquote>
+<p>PULL解析器的运行方式和SAX解析器很相似，都是事件触发机制。如开始元素和结束元素，使用parser.next()可以进行下一个元素并触发相应的事件，事件作为代码被发送，返回值是数字，因此可以用一个switch语句来对事件进行选择，然后进行相应的处理，当开始解析元素的时候，调用parser.nextText()方法可以获得下一个Text类型的元素。</p>
+</blockquote>
+<p><strong>常用属性</strong></p>
+<ul>
+<li>START_DOCUMENT</li>
+<li>START_TAG</li>
+<li>TEXT</li>
+<li>END_TAG</li>
+<li>END_DOCUMENT</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private List&#60;Person&#62; parserXmlFromLocal() &#123;&#10;&#9;&#9;try &#123;&#10;&#9;&#9;&#9;File path = new File(Environment.getExternalStorageDirectory(), &#34;persons.xml&#34;);&#10;&#9;&#9;&#9;FileInputStream fis = new FileInputStream(path);&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;// &#33719;&#24471;pull&#35299;&#26512;&#22120;&#23545;&#35937;&#10;&#9;&#9;&#9;XmlPullParser parser = Xml.newPullParser();&#10;&#9;&#9;&#9;// &#25351;&#23450;&#35299;&#26512;&#30340;&#25991;&#20214;&#21644;&#32534;&#30721;&#26684;&#24335;&#10;&#9;&#9;&#9;parser.setInput(fis, &#34;utf-8&#34;);&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;int eventType = parser.getEventType(); &#9;&#9;// &#33719;&#24471;&#20107;&#20214;&#31867;&#22411;&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;List&#60;Person&#62; personList = null;&#10;&#9;&#9;&#9;Person person = null;&#10;&#9;&#9;&#9;String id;&#10;&#9;&#9;&#9;while(eventType != XmlPullParser.END_DOCUMENT) &#123;&#10;&#9;&#9;&#9;&#9;String tagName = parser.getName();&#9;// &#33719;&#24471;&#24403;&#21069;&#33410;&#28857;&#30340;&#21517;&#31216;&#10;&#9;&#9;&#9;&#9;&#10;&#9;&#9;&#9;&#9;switch (eventType) &#123;&#10;&#9;&#9;&#9;&#9;case XmlPullParser.START_TAG: // &#24403;&#21069;&#31561;&#20110;&#24320;&#22987;&#33410;&#28857;  &#60;person&#62;&#10;&#9;&#9;&#9;&#9;&#9;if(&#34;persons&#34;.equals(tagName)) &#123;&#9;// &#60;persons&#62;&#10;&#9;&#9;&#9;&#9;&#9;&#9;personList = new ArrayList&#60;Person&#62;();&#10;&#9;&#9;&#9;&#9;&#9;&#125; else if(&#34;person&#34;.equals(tagName)) &#123; // &#60;person id=&#34;1&#34;&#62;&#10;&#9;&#9;&#9;&#9;&#9;&#9;person = new Person();&#10;&#9;&#9;&#9;&#9;&#9;&#9;id = parser.getAttributeValue(null, &#34;id&#34;);&#10;&#9;&#9;&#9;&#9;&#9;&#9;person.setId(Integer.valueOf(id));&#10;&#9;&#9;&#9;&#9;&#9;&#125; else if(&#34;name&#34;.equals(tagName)) &#123; // &#60;name&#62;&#10;&#9;&#9;&#9;&#9;&#9;&#9;person.setName(parser.nextText());&#10;&#9;&#9;&#9;&#9;&#9;&#125; else if(&#34;age&#34;.equals(tagName)) &#123; // &#60;age&#62;&#10;&#9;&#9;&#9;&#9;&#9;&#9;person.setAge(Integer.parseInt(parser.nextText()));&#10;&#9;&#9;&#9;&#9;&#9;&#125;&#10;&#9;&#9;&#9;&#9;&#9;break;&#10;&#9;&#9;&#9;&#9;case XmlPullParser.END_TAG:&#9;&#9;// &#60;/persons&#62;&#10;&#9;&#9;&#9;&#9;&#9;if(&#34;person&#34;.equals(tagName)) &#123;&#10;&#9;&#9;&#9;&#9;&#9;&#9;// &#38656;&#35201;&#25226;&#19978;&#38754;&#35774;&#32622;&#22909;&#20540;&#30340;person&#23545;&#35937;&#28155;&#21152;&#21040;&#38598;&#21512;&#20013;&#10;&#9;&#9;&#9;&#9;&#9;&#9;personList.add(person);&#10;&#9;&#9;&#9;&#9;&#9;&#125;&#10;&#9;&#9;&#9;&#9;&#9;break;&#10;&#9;&#9;&#9;&#9;default:&#10;&#9;&#9;&#9;&#9;&#9;break;&#10;&#9;&#9;&#9;&#9;&#125;&#10;&#9;&#9;&#9;&#9;&#10;&#9;&#9;&#9;&#9;eventType = parser.next();&#9;&#9;// &#33719;&#24471;&#19979;&#19968;&#20010;&#20107;&#20214;&#31867;&#22411;&#10;&#9;&#9;&#9;&#125;&#10;&#9;&#9;&#9;return personList;&#10;&#9;&#9;&#125; catch (Exception e) &#123;&#10;&#9;&#9;&#9;e.printStackTrace();&#10;&#9;&#9;&#125;&#10;&#9;&#9;return null;&#10;&#9;&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/05/14/Android数据存储的方法（ROM、SD卡、SharedPreference）/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          Android数据存储的方法（ROM、SD卡、SharedPreference）
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/05/14/Fragment的基本使用方法与通信/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Fragment的基本使用方法与通信</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="Android中Junit测试、XML的序列化与解析" data-title="Android中Junit测试、XML的序列化与解析" data-url="http://yoursite.com/2016/05/14/Android中Junit测试、XML的序列化与解析/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 victor_yuan
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

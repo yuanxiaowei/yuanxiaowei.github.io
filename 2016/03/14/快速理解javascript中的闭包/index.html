@@ -4,45 +4,28 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>DOM事件流解析 | victor_yuan</title>
+  <title>快速理解javascript中的闭包 | victor_yuan</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="什么是事件流？
-事件流：描述的就是从页面中接受事件的顺序。分有事件冒泡与事件捕获两种。
-
-什么是事件冒泡？
-事件冒泡即事件开始时，由最具体的元素接收（也就是事件发生所在的节点），然后逐级传播到较为不具体的节点。
-
-什么是事件捕获？
-事件捕获的概念，与事件冒泡正好相反。它认为当某个事件发生时，父元素应该更早接收到事件，具体元素则最后接收到事件。
-
-明白了上面的三个概念基本上就弄懂了DOM的事件流了，">
+  <meta name="description" content="首先要理解作用域
+在JavaScript中，作用域通常是指代码的上下文(context)。能够定义全局或者局部作用域。
+函数作用域：JavaScript 中函数域为最小域范围。for与while循环或者if和switch都不能构建作用域。规则就是，新函数新域。
+词汇作用域：当遇到一个函数嵌套到另一函数中，内部函数能够访问外部函数的作用域，那么这种方式叫做词汇作用域（Lexical Socpe）或者">
 <meta property="og:type" content="article">
-<meta property="og:title" content="DOM事件流解析">
-<meta property="og:url" content="http://yoursite.com/2016/02/24/DOM事件流解析/index.html">
+<meta property="og:title" content="快速理解javascript中的闭包">
+<meta property="og:url" content="http://yoursite.com/2016/03/14/快速理解javascript中的闭包/index.html">
 <meta property="og:site_name" content="victor_yuan">
-<meta property="og:description" content="什么是事件流？
-事件流：描述的就是从页面中接受事件的顺序。分有事件冒泡与事件捕获两种。
-
-什么是事件冒泡？
-事件冒泡即事件开始时，由最具体的元素接收（也就是事件发生所在的节点），然后逐级传播到较为不具体的节点。
-
-什么是事件捕获？
-事件捕获的概念，与事件冒泡正好相反。它认为当某个事件发生时，父元素应该更早接收到事件，具体元素则最后接收到事件。
-
-明白了上面的三个概念基本上就弄懂了DOM的事件流了，">
-<meta property="og:updated_time" content="2016-05-14T07:55:39.000Z">
+<meta property="og:description" content="首先要理解作用域
+在JavaScript中，作用域通常是指代码的上下文(context)。能够定义全局或者局部作用域。
+函数作用域：JavaScript 中函数域为最小域范围。for与while循环或者if和switch都不能构建作用域。规则就是，新函数新域。
+词汇作用域：当遇到一个函数嵌套到另一函数中，内部函数能够访问外部函数的作用域，那么这种方式叫做词汇作用域（Lexical Socpe）或者">
+<meta property="og:image" content="http://7xpt6z.com1.z0.glb.clouddn.com/%E6%B7%B1%E5%85%A5javascript%E4%B8%AD%E7%9A%84%E9%97%AD%E5%8C%85.png">
+<meta property="og:updated_time" content="2016-05-14T07:54:34.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="DOM事件流解析">
-<meta name="twitter:description" content="什么是事件流？
-事件流：描述的就是从页面中接受事件的顺序。分有事件冒泡与事件捕获两种。
-
-什么是事件冒泡？
-事件冒泡即事件开始时，由最具体的元素接收（也就是事件发生所在的节点），然后逐级传播到较为不具体的节点。
-
-什么是事件捕获？
-事件捕获的概念，与事件冒泡正好相反。它认为当某个事件发生时，父元素应该更早接收到事件，具体元素则最后接收到事件。
-
-明白了上面的三个概念基本上就弄懂了DOM的事件流了，">
+<meta name="twitter:title" content="快速理解javascript中的闭包">
+<meta name="twitter:description" content="首先要理解作用域
+在JavaScript中，作用域通常是指代码的上下文(context)。能够定义全局或者局部作用域。
+函数作用域：JavaScript 中函数域为最小域范围。for与while循环或者if和switch都不能构建作用域。规则就是，新函数新域。
+词汇作用域：当遇到一个函数嵌套到另一函数中，内部函数能够访问外部函数的作用域，那么这种方式叫做词汇作用域（Lexical Socpe）或者">
   
     <link rel="alternative" href="/atom.xml" title="victor_yuan" type="application/atom+xml">
   
@@ -214,11 +197,11 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-DOM事件流解析" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-快速理解javascript中的闭包" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/02/24/DOM事件流解析/" class="article-date">
-  	<time datetime="2016-02-24T07:33:13.000Z" itemprop="datePublished">2016-02-24</time>
+      <a href="/2016/03/14/快速理解javascript中的闭包/" class="article-date">
+  	<time datetime="2016-03-14T07:39:46.000Z" itemprop="datePublished">2016-03-14</time>
 </a>
     </div>
   
@@ -231,7 +214,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      DOM事件流解析
+      快速理解javascript中的闭包
     </h1>
   
 
@@ -251,31 +234,37 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="u4EC0_u4E48_u662F_u4E8B_u4EF6_u6D41_uFF1F"><a href="#u4EC0_u4E48_u662F_u4E8B_u4EF6_u6D41_uFF1F" class="headerlink" title="什么是事件流？"></a>什么是事件流？</h2><blockquote>
-<p>事件流：描述的就是从页面中接受事件的顺序。分有事件冒泡与事件捕获两种。</p>
-</blockquote>
-<h2 id="u4EC0_u4E48_u662F_u4E8B_u4EF6_u5192_u6CE1_uFF1F"><a href="#u4EC0_u4E48_u662F_u4E8B_u4EF6_u5192_u6CE1_uFF1F" class="headerlink" title="什么是事件冒泡？"></a>什么是事件冒泡？</h2><blockquote>
-<p>事件冒泡即事件开始时，由最具体的元素接收（也就是事件发生所在的节点），然后逐级传播到较为不具体的节点。</p>
-</blockquote>
-<h2 id="u4EC0_u4E48_u662F_u4E8B_u4EF6_u6355_u83B7_uFF1F"><a href="#u4EC0_u4E48_u662F_u4E8B_u4EF6_u6355_u83B7_uFF1F" class="headerlink" title="什么是事件捕获？"></a>什么是事件捕获？</h2><blockquote>
-<p>事件捕获的概念，与事件冒泡正好相反。它认为当某个事件发生时，父元素应该更早接收到事件，具体元素则最后接收到事件。</p>
-</blockquote>
-<p>明白了上面的三个概念基本上就弄懂了DOM的事件流了，下面来彻底明白事件流。</p>
-<h2 id="DOM_u4E8B_u4EF6_u6D41_u7684_u4E09_u4E2A_u9636_u6BB5_uFF1A"><a href="#DOM_u4E8B_u4EF6_u6D41_u7684_u4E09_u4E2A_u9636_u6BB5_uFF1A" class="headerlink" title="DOM事件流的三个阶段："></a>DOM事件流的三个阶段：</h2><ol>
-<li>事件捕获阶段（为截获事件提供了机会）</li>
-<li>处于目标阶段</li>
-<li>事件冒泡阶段（对事件作出响应）</li>
+        <p><img src="http://7xpt6z.com1.z0.glb.clouddn.com/%E6%B7%B1%E5%85%A5javascript%E4%B8%AD%E7%9A%84%E9%97%AD%E5%8C%85.png" alt="深入javascript中的闭包.png"></p>
+<h2 id="u9996_u5148_u8981_u7406_u89E3_u4F5C_u7528_u57DF"><a href="#u9996_u5148_u8981_u7406_u89E3_u4F5C_u7528_u57DF" class="headerlink" title="首先要理解作用域"></a>首先要理解作用域</h2><ol>
+<li>在JavaScript中，作用域通常是指代码的上下文(context)。能够定义全局或者局部作用域。</li>
+<li>函数作用域：JavaScript 中函数域为最小域范围。for与while循环或者if和switch都不能构建作用域。规则就是，新函数新域。</li>
+<li>词汇作用域：当遇到一个函数嵌套到另一函数中，内部函数能够访问外部函数的作用域，那么这种方式叫做词汇作用域（Lexical Socpe）或者闭包，也称为成为静态作用域。</li>
+<li>任何父作用域中定义的变量、对象和函数在其域作用链中都可以使用</li>
+<li>作用域链：函数的作用域由作用域链构成。我们知道，每个函数可以定义嵌套的作用域，任何内嵌函数都有一个局部作用域连接外部函数。这种嵌套关系我们可以称为链。域一般由代码中的位置决定。当解释（resolving）一个变量，通常从作用域链的最里层开始，向外搜索，直到发现要寻找的变量、对象或者函数。作用域链的用途是保证对执行环境有权访问的所有变量和函数的有序访问。作用域链包含了在环境栈中的每个执行环境对应的变量对象。通过作用域链，可以决定变量的访问和标识符的解析。全局执行环境的变量对象始终都是作用域链的最后一个对象。</li>
 </ol>
-<p>当一个DOM事件触发时，它不是在触发的对象上只触发一次的，而是经历上述的三个阶段，即开始从文档的根节点流向目标对象，然后在目标对向上被触发，之后再回溯到文档的根节点。</p>
-<p>来个实例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var button = document.getElementById(&#39;clickMe&#39;);&#10;&#10;button.onclick = function() &#123;&#10;&#160; console.log(&#39;1. You click Button&#39;);&#10;&#125;;&#10;document.body.onclick = function() &#123;&#10;&#160; console.log(&#39;2. You click body&#39;);&#10;&#125;;&#10;document.onclick = function() &#123;&#10;&#160; console.log(&#39;3. You click document&#39;);&#10;&#125;;&#10;window.onclick = function() &#123;&#10;&#160; console.log(&#39;4. You click window&#39;);&#10;&#125;;</span><br></pre></td></tr></table></figure>
-<p>把window点击事件更改为使用事件捕获模式</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">window.addEventListener(&#39;click&#39;, function() &#123;&#10;&#160; &#160;console.log(&#39;4. You click window&#39;);&#10;&#160;&#125;, true);//true&#20195;&#34920;&#20351;&#29992;&#20107;&#20214;&#25429;&#33719;&#27169;&#24335;&#65292;alse&#21017;&#34920;&#31034;&#20351;&#29992;&#20107;&#20214;&#20882;&#27873;&#27169;&#24335;</span><br></pre></td></tr></table></figure>
-<p>输出为4-&gt;1-&gt;2-&gt;3点击事件先被父元素截获了，且该函数只在事件捕获阶段起作用。</p>
-<p>阻止事件冒泡：<br>stopPropagation()防止事件冒泡而带来不必要的错误和困扰。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">button.addEventListener(&#39;click&#39;, function(event) &#123;&#10;&#160; &#160;// event&#20026;&#20107;&#20214;&#23545;&#35937;&#10;&#160; &#160;console.log(&#39;1. You click Button&#39;);&#10;&#160; &#160;event.stopPropagation();&#10;&#160; &#160;console.log(&#39;Stop Propagation!&#39;);&#10;&#160;&#125;, false);</span><br></pre></td></tr></table></figure>
-<p>输出为4-&gt;1，事件在到达具体元素后，停止了冒泡。但不影响父元素的事件捕获。</p>
-<p>本文参考：<strong><a href="http://www.cnblogs.com/LIUYANZUO/p/5332583.html" target="_blank" rel="external">http://www.cnblogs.com/LIUYANZUO/p/5332583.html</a></strong></p>
+<h2 id="u95ED_u5305"><a href="#u95ED_u5305" class="headerlink" title="闭包"></a>闭包</h2><blockquote>
+<p><strong>特性</strong>：</p>
+<ul>
+<li>函数嵌套函数  </li>
+<li>函数内部可以引用外部的参数和变量  </li>
+<li>参数和变量不会被垃圾回收机制回收</li>
+</ul>
+<p><strong>作用</strong>：创建私有变量模仿块级作用域</p>
+</blockquote>
+<ol>
+<li><p>闭包是指有权访问另一函数作用域中的变量的函数。换句话说，在函数内定义一个嵌套的函数时，就构成了一个闭包，它允许嵌套函数访问外层函数的变量。通过返回嵌套函数，允许你维护对外部函数中局部变量、参数、和内函数声明的访问。这种封装允许你在外部作用域中隐藏和保护执行环境，并且暴露公共接口，进而通过公共接口执行进一步的操作。</p>
+</li>
+<li><p>闭包和词法域（ Lexical Scope）很像。返回函数引用，这种实际应用，是一个可以用来解释闭包工作原理的好例子。在我们的域内部，我们可以返回对象，能够被父域使用</p>
+</li>
+<li><p>闭包使得我们的内部域无法被公共域访问到。单独调用函数并不作任何操作，因为其单纯的返回一个函数。闭包并不一定需要返回函数。单纯在中间词汇域量的范围外简单访问变量就创造了一个闭包。</p>
+</li>
+</ol>
+<h2 id="u95ED_u5305_u7684_u5E94_u7528"><a href="#u95ED_u5305_u7684_u5E94_u7528" class="headerlink" title="闭包的应用"></a>闭包的应用</h2><ol>
+<li><p>模块化：模块类似于一个单例对象。由于在上面的代码中我们利用了(function() { … })();的匿名函数形式，因此当编译器解析它的时候会立即执行。在闭包的执行上下文的外部唯一可以访问的对象是位于返回对象中的公共方法和属性。然而，因为执行上下文被保存的缘故，所有的私有属性和方法将一直存在于应用的整个生命周期，这意味着我们只有通过公共方法才可以与它们交互。</p>
+</li>
+<li><p>立即执行的函数表达式(IIFE): 是一个在全局环境中自执行的匿名函数,护全局命名空间免受变量污染,它通过构建函数作用域的形式将变量与全局命名空间隔离，并通过闭包的形式让它们存在于整个运行时（runtime）。在很多的应用和框架中，这种封装源代码的方式用处非常的流行，通常都是通过暴露一个单一的全局接口的方式与外部进行交互。</p>
+</li>
+</ol>
 
       
     </div>
@@ -285,18 +274,18 @@
     
 <nav id="article-nav">
   
-    <a href="/2016/03/01/快速理解javascript中的this/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2016/05/14/Fragment的基本使用方法与通信/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         
-          快速理解javascript中的this
+          Fragment的基本使用方法与通信
         
       </div>
     </a>
   
   
-    <a href="/2016/02/13/success/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">CSS3中的媒体查询</div>
+    <a href="/2016/03/01/快速理解javascript中的this/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">快速理解javascript中的this</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -331,7 +320,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="DOM事件流解析" data-title="DOM事件流解析" data-url="http://yoursite.com/2016/02/24/DOM事件流解析/"></div>
+	<div class="ds-thread" data-thread-key="快速理解javascript中的闭包" data-title="快速理解javascript中的闭包" data-url="http://yoursite.com/2016/03/14/快速理解javascript中的闭包/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
