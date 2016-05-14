@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>Android数据存储的方法（ROM、SD卡、SharedPreference） | victor_yuan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一、保存文件到手机内存123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051/**	 * 保存数据到手机rom的文件里面.	 * @param context 应用程序的上下文 提供环境	 * @param name 用户名	 * @param password 密码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android数据存储的方法（ROM、SD卡、SharedPreference）">
+<meta property="og:url" content="http://yoursite.com/2015/02/14/Android数据存储的方法（ROM、SD卡、SharedPreference）/index.html">
+<meta property="og:site_name" content="victor_yuan">
+<meta property="og:description" content="一、保存文件到手机内存123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051/**	 * 保存数据到手机rom的文件里面.	 * @param context 应用程序的上下文 提供环境	 * @param name 用户名	 * @param password 密码">
+<meta property="og:updated_time" content="2016-05-14T08:44:35.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android数据存储的方法（ROM、SD卡、SharedPreference）">
+<meta name="twitter:description" content="一、保存文件到手机内存123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051/**	 * 保存数据到手机rom的文件里面.	 * @param context 应用程序的上下文 提供环境	 * @param name 用户名	 * @param password 密码">
+  
+    <link rel="alternative" href="/atom.xml" title="victor_yuan" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://cl.ly/26350T2h1P0H/fav.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">victor_yuan</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>標籤</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>關於</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="/#" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+					        
+								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+					        
+								<a class="facebook" target="_blank" href="/#" title="facebook">facebook</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/android/" style="font-size: 20px;">android</a> <a href="/tags/css/" style="font-size: 10px;">css</a> <a href="/tags/javascript/" style="font-size: 15px;">javascript</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">奥巴马的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">victor_yuan</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="http://cl.ly/26350T2h1P0H/fav.jpg" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">victor_yuan</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="/#" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+			        
+						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+			        
+						<a class="facebook" target="_blank" href="/#" title="facebook">facebook</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-Android数据存储的方法（ROM、SD卡、SharedPreference）" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/02/14/Android数据存储的方法（ROM、SD卡、SharedPreference）/" class="article-date">
+  	<time datetime="2015-02-14T08:02:08.000Z" itemprop="datePublished">2015-02-14</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android数据存储的方法（ROM、SD卡、SharedPreference）
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="u4E00_u3001_u4FDD_u5B58_u6587_u4EF6_u5230_u624B_u673A_u5185_u5B58"><a href="#u4E00_u3001_u4FDD_u5B58_u6587_u4EF6_u5230_u624B_u673A_u5185_u5B58" class="headerlink" title="一、保存文件到手机内存"></a>一、保存文件到手机内存</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line">	 * 保存数据到手机rom的文件里面.</span><br><span class="line">	 * <span class="doctag">@param</span> context 应用程序的上下文 提供环境</span><br><span class="line">	 * <span class="doctag">@param</span> name 用户名</span><br><span class="line">	 * <span class="doctag">@param</span> password 密码</span><br><span class="line">	 * <span class="doctag">@throws</span> Exception</span><br><span class="line">	 */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">saveToRom</span><span class="params">(Context context, String name , String password)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">		<span class="comment">//File file = new File("/data/data/com.itheima.login/files/info.txt");</span></span><br><span class="line">		File file = <span class="keyword">new</span> File(context.getFilesDir(),<span class="string">"info.txt"</span>);<span class="comment">//该文件在data下的files文件夹下getCacheDir()在cache文件夹下 文件大小不要超过1Mb</span></span><br><span class="line">		FileOutputStream fos = <span class="keyword">new</span> FileOutputStream(file);</span><br><span class="line">		String txt = name+<span class="string">":"</span>+password;</span><br><span class="line">		fos.write(txt.getBytes());</span><br><span class="line">		fos.flush();</span><br><span class="line">		fos.close();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line">	 * 获取保存的数据</span><br><span class="line">	 * <span class="doctag">@param</span> context</span><br><span class="line">	 * <span class="doctag">@return</span></span><br><span class="line">	 */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Map&lt;String,String&gt; getUserInfo(Context context) &#123;</span><br><span class="line">		File file = <span class="keyword">new</span> File(context.getFilesDir(),<span class="string">"info.txt"</span>);</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			FileInputStream fis = <span class="keyword">new</span> FileInputStream(file);</span><br><span class="line">           <span class="comment">//也可直接读取文件String result = StreamTools.readFromStream(fis);</span></span><br><span class="line">			BufferedReader br = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(fis));</span><br><span class="line">			String str = br.readLine();</span><br><span class="line">			String[] infos = str.split(<span class="string">":"</span>);</span><br><span class="line">			Map&lt;String,String&gt; map = <span class="keyword">new</span> HashMap&lt;String, String&gt;();</span><br><span class="line">			map.put(<span class="string">"username"</span>, infos[<span class="number">0</span>]);</span><br><span class="line">			map.put(<span class="string">"password"</span>, infos[<span class="number">1</span>]);</span><br><span class="line">			<span class="keyword">return</span> map;</span><br><span class="line">		&#125; <span class="keyword">catch</span>(Exception e) &#123;</span><br><span class="line">			</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line"><span class="comment">//最后可以直接调用上面的方法读取信息</span></span><br><span class="line">Map&lt;String, String&gt; map = getUserInfo(<span class="keyword">this</span>);</span><br><span class="line">If(map!=<span class="keyword">null</span>)&#123;</span><br><span class="line">Textview.setText(map.get(“username”));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="u4E8C_u3001_u4FDD_u5B58_u6587_u4EF6_u5230SD_u5361"><a href="#u4E8C_u3001_u4FDD_u5B58_u6587_u4EF6_u5230SD_u5361" class="headerlink" title="二、保存文件到SD卡"></a>二、保存文件到SD卡</h3><p>获取手机sd空间的大小：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">File path = Environment.getExternalStorageDirectory();</span><br><span class="line">		StatFs stat = <span class="keyword">new</span> StatFs(path.getPath());</span><br><span class="line">		<span class="keyword">long</span> blockSize = stat.getBlockSize();</span><br><span class="line">		<span class="keyword">long</span> totalBlocks = stat.getBlockCount();</span><br><span class="line">		<span class="keyword">long</span> availableBlocks = stat.getAvailableBlocks();</span><br><span class="line">		<span class="keyword">long</span> totalSize = blockSize*totalBlocks;</span><br><span class="line">		<span class="keyword">long</span> availSize = blockSize * availableBlocks;</span><br><span class="line">		</span><br><span class="line">		String totalStr = Formatter.formatFileSize(<span class="keyword">this</span>,totalSize);</span><br><span class="line">		String availStr = Formatter.formatFileSize(<span class="keyword">this</span>, availSize);</span><br><span class="line">		tv.setText(<span class="string">"总空间"</span>+totalStr+<span class="string">"\n"</span>+<span class="string">"可用空间"</span>+availStr);</span><br></pre></td></tr></table></figure>
+<p>加入写外部存储的权限：</p>
+<p><strong>\<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission></strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">save</span><span class="params">(String name ,String password)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line"><span class="keyword">if</span> (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))&#123;</span><br><span class="line">File file = <span class="keyword">new</span> File(Environment.getExternalStorageDirectory(),<span class="string">"info.txt"</span>);</span><br><span class="line"><span class="comment">//也可直接写/sdcard/info.txt 先判断sd卡是否存在</span></span><br><span class="line">		FileOutputStream fos = <span class="keyword">new</span> FileOutputStream(file);</span><br><span class="line">		String txt = name+<span class="string">":"</span>+password;</span><br><span class="line">		fos.write(txt.getBytes());</span><br><span class="line">		fos.flush();</span><br><span class="line">		fos.close();</span><br><span class="line"><span class="comment">// 使用RandomAccessFile像文件追加内容FileOutputStream会把原有的文件内容清空</span></span><br><span class="line"><span class="comment">//RandomAccessFile raf = new RandomAccessFile(file,"rw");</span></span><br><span class="line"><span class="comment">//raf.seek(file.length());  将文件指针移动到最后</span></span><br><span class="line"><span class="comment">//raf.write(name.getBytes()+password.getBytes());</span></span><br><span class="line"><span class="comment">//raf.close();</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//读取文件 加入读取权限</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">read</span><span class="params">()</span></span>&#123;</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				<span class="keyword">if</span> (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))&#123;</span><br><span class="line">					File sdcardDir = Environment.getExternalStorageDirectory();</span><br><span class="line">					FileInputStream fis = <span class="keyword">new</span> FileInputStream(sdcardDir.getCanonicalPath() + <span class="string">"info.txt"</span>);</span><br><span class="line">					BufferedReader br = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(fis));</span><br><span class="line">					StringBuilder sb = <span class="keyword">new</span> StringBuilder(<span class="string">""</span>);</span><br><span class="line">					String line = <span class="keyword">null</span>;</span><br><span class="line">					<span class="keyword">while</span> ((line = br.readLine())!= <span class="keyword">null</span>)&#123;</span><br><span class="line">						sb.append(line);</span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">return</span> sb.toString();</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;  <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">				</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">		&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="u4E09_u3001Sharedpreferences_u7684_u4F7F_u7528"><a href="#u4E09_u3001Sharedpreferences_u7684_u4F7F_u7528" class="headerlink" title="三、Sharedpreferences的使用"></a>三、Sharedpreferences的使用</h3><blockquote>
+<p>SharedPreference是开发中常用的一种存储方式，主要存储一些系统不变的参数如是否是第一次进入应用程序等，通过键值对的方式进行存储</p>
+</blockquote>
+<p><strong>可以存储的类型：booleans, floats, ints, longs,strings.</strong></p>
+<ul>
+<li>getSharedPreferences() - 存储多个参数</li>
+<li>getPreferences() - 仅存储一个参数并且不需要指定名字（key）</li>
+</ul>
+<p><strong>写入的步骤：</strong></p>
+<ol>
+<li>SharedPreferences调用edit（）得到一个Editor对象</li>
+<li>使用 putBoolean() and putString()添加值</li>
+<li>提交事务完成存储</li>
+</ol>
+<p><strong>读取时：只需要调用SharedPreferences的getBoolean() and getString()</strong></p>
+<p>下面是示例代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class MySharedPreference &#123;&#10;&#9;private Context context;&#10;&#9;private SharedPreferences sp ;&#10;&#9;private Editor edit;&#10;&#9;public MySharedPreference(Context context)&#123;&#10;&#9;&#9;this.context = context;&#10;&#9;&#125;&#10;&#9;public boolean saveMessage(String name,String pwd)&#123;&#10;&#9;&#9;boolean flag = false;&#10;&#9;&#9; sp = context.getSharedPreferences(&#34;userInfo&#34;,Context.MODE_PRIVATE);&#10;         //MODE&#23450;&#20041;&#20102;&#35775;&#38382;&#30340;&#26435;&#38480;&#29616;&#22312;&#26159;&#26412;&#24212;&#29992;&#21487;&#20197;&#35775;&#38382;&#10;&#9;&#9;edit = sp.edit();&#10;&#9;&#9;edit.putString(&#34;name&#34;, name);&#10;&#9;&#9;edit.putString(&#34;pwd&#34;, pwd);&#10;&#9;&#9;flag = edit.commit();//&#25552;&#20132;&#20107;&#21153;&#23558;&#25968;&#25454;&#25345;&#20037;&#21270;&#21040;&#23384;&#20648;&#22120;&#20013;&#10;&#9;&#9;return flag;&#10;&#9;&#9;&#10;&#9;&#125;&#10;&#9;public Map&#60;String,Object&#62; getMessage()&#123;&#10;&#9;&#9;Map&#60;String,Object&#62; map = new HashMap&#60;String, Object&#62;();&#10;&#9;&#9;sp = context.getSharedPreferences(&#34;userInfo&#34;, Context.MODE_PRIVATE);&#10;&#9;&#9;String name = sp.getString(&#34;name&#34;, &#34;&#34;);&#10;&#9;&#9;String pwd = sp.getString(&#34;pwd&#34;, &#34;&#34;);&#10;&#9;&#9;map.put(&#34;name&#34;, name);&#10;&#9;&#9;map.put(&#34;pwd&#34;,pwd);&#10;&#9;&#9;return map;&#10;&#9;&#9;&#10;&#9;&#125;&#10;&#10;&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/05/14/ViewPager的使用（实现微信左右切换页卡功能）/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          ViewPager的使用（实现微信左右切换页卡功能）
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="Android数据存储的方法（ROM、SD卡、SharedPreference）" data-title="Android数据存储的方法（ROM、SD卡、SharedPreference）" data-url="http://yoursite.com/2015/02/14/Android数据存储的方法（ROM、SD卡、SharedPreference）/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 victor_yuan
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

@@ -188,197 +188,6 @@
 
       <div class="body-wrap">
   
-    <article id="post-DOM事件流解析" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/02/24/DOM事件流解析/" class="article-date">
-  	<time datetime="2016-02-24T07:33:13.000Z" itemprop="datePublished">2016-02-24</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/02/24/DOM事件流解析/">DOM事件流解析</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="u4EC0_u4E48_u662F_u4E8B_u4EF6_u6D41_uFF1F"><a href="#u4EC0_u4E48_u662F_u4E8B_u4EF6_u6D41_uFF1F" class="headerlink" title="什么是事件流？"></a>什么是事件流？</h2><blockquote>
-<p>事件流：描述的就是从页面中接受事件的顺序。分有事件冒泡与事件捕获两种。</p>
-</blockquote>
-<h2 id="u4EC0_u4E48_u662F_u4E8B_u4EF6_u5192_u6CE1_uFF1F"><a href="#u4EC0_u4E48_u662F_u4E8B_u4EF6_u5192_u6CE1_uFF1F" class="headerlink" title="什么是事件冒泡？"></a>什么是事件冒泡？</h2><blockquote>
-<p>事件冒泡即事件开始时，由最具体的元素接收（也就是事件发生所在的节点），然后逐级传播到较为不具体的节点。</p>
-</blockquote>
-<h2 id="u4EC0_u4E48_u662F_u4E8B_u4EF6_u6355_u83B7_uFF1F"><a href="#u4EC0_u4E48_u662F_u4E8B_u4EF6_u6355_u83B7_uFF1F" class="headerlink" title="什么是事件捕获？"></a>什么是事件捕获？</h2><blockquote>
-<p>事件捕获的概念，与事件冒泡正好相反。它认为当某个事件发生时，父元素应该更早接收到事件，具体元素则最后接收到事件。</p>
-</blockquote>
-<p>明白了上面的三个概念基本上就弄懂了DOM的事件流了，下面来彻底明白事件流。</p>
-<h2 id="DOM_u4E8B_u4EF6_u6D41_u7684_u4E09_u4E2A_u9636_u6BB5_uFF1A"><a href="#DOM_u4E8B_u4EF6_u6D41_u7684_u4E09_u4E2A_u9636_u6BB5_uFF1A" class="headerlink" title="DOM事件流的三个阶段："></a>DOM事件流的三个阶段：</h2><ol>
-<li>事件捕获阶段（为截获事件提供了机会）</li>
-<li>处于目标阶段</li>
-<li>事件冒泡阶段（对事件作出响应）</li>
-</ol>
-<p>当一个DOM事件触发时，它不是在触发的对象上只触发一次的，而是经历上述的三个阶段，即开始从文档的根节点流向目标对象，然后在目标对向上被触发，之后再回溯到文档的根节点。</p>
-<p>来个实例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var button = document.getElementById(&#39;clickMe&#39;);&#10;&#10;button.onclick = function() &#123;&#10;&#160; console.log(&#39;1. You click Button&#39;);&#10;&#125;;&#10;document.body.onclick = function() &#123;&#10;&#160; console.log(&#39;2. You click body&#39;);&#10;&#125;;&#10;document.onclick = function() &#123;&#10;&#160; console.log(&#39;3. You click document&#39;);&#10;&#125;;&#10;window.onclick = function() &#123;&#10;&#160; console.log(&#39;4. You click window&#39;);&#10;&#125;;</span><br></pre></td></tr></table></figure>
-<p>把window点击事件更改为使用事件捕获模式</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">window.addEventListener(&#39;click&#39;, function() &#123;&#10;&#160; &#160;console.log(&#39;4. You click window&#39;);&#10;&#160;&#125;, true);//true&#20195;&#34920;&#20351;&#29992;&#20107;&#20214;&#25429;&#33719;&#27169;&#24335;&#65292;alse&#21017;&#34920;&#31034;&#20351;&#29992;&#20107;&#20214;&#20882;&#27873;&#27169;&#24335;</span><br></pre></td></tr></table></figure>
-<p>输出为4-&gt;1-&gt;2-&gt;3点击事件先被父元素截获了，且该函数只在事件捕获阶段起作用。</p>
-<p>阻止事件冒泡：<br>stopPropagation()防止事件冒泡而带来不必要的错误和困扰。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">button.addEventListener(&#39;click&#39;, function(event) &#123;&#10;&#160; &#160;// event&#20026;&#20107;&#20214;&#23545;&#35937;&#10;&#160; &#160;console.log(&#39;1. You click Button&#39;);&#10;&#160; &#160;event.stopPropagation();&#10;&#160; &#160;console.log(&#39;Stop Propagation!&#39;);&#10;&#160;&#125;, false);</span><br></pre></td></tr></table></figure>
-<p>输出为4-&gt;1，事件在到达具体元素后，停止了冒泡。但不影响父元素的事件捕获。</p>
-<p>本文参考：<strong><a href="http://www.cnblogs.com/LIUYANZUO/p/5332583.html" target="_blank" rel="external">http://www.cnblogs.com/LIUYANZUO/p/5332583.html</a></strong></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/">javascript</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-success" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/02/13/success/" class="article-date">
-  	<time datetime="2016-02-13T11:36:23.000Z" itemprop="datePublished">2016-02-13</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/02/13/success/">CSS3中的媒体查询</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="u4E00_u3001_u4E3A_u4EC0_u4E48_u9700_u8981_u5A92_u4F53_u67E5_u8BE2"><a href="#u4E00_u3001_u4E3A_u4EC0_u4E48_u9700_u8981_u5A92_u4F53_u67E5_u8BE2" class="headerlink" title="一、为什么需要媒体查询"></a>一、为什么需要媒体查询</h3><p>CSS3的媒体查询模块就是为了针对设备特性（width、height等）设置特定的css样式，可以在不改变当前页面内容的情况下，为特定的一些设备定制显示效果。</p>
-<h3 id="u4E8C_u3001_u5A92_u4F53_u67E5_u8BE2_u8BED_u6CD5"><a href="#u4E8C_u3001_u5A92_u4F53_u67E5_u8BE2_u8BED_u6CD5" class="headerlink" title="二、媒体查询语法"></a>二、媒体查询语法</h3><p>1.媒体查询在一段CSS后引入特定样式</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="at_rule">@<span class="keyword">media</span> screen and (max-width:<span class="number">960px</span>)</span>&#123;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>2.使用 CSS 的@import 指令在当前样式表中按条件引入其他样式表</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="at_rule">@<span class="keyword">import</span> <span class="function">url</span>(<span class="string">"phone.css"</span>) screen and (max-width:<span class="number">360px</span>)</span>;</span><br></pre></td></tr></table></figure>
-<p>3.利用媒体查询引入特定的样式文件</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;link rel="stylesheet" media="screen and (orientation: portrait) and (min-width: 800px), projection" href="800wide-portrait-screen.css" /&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="u4E09_u3001_u5A92_u4F53_u67E5_u8BE2_u53EF_u68C0_u6D4B_u7684_u7279_u6027"><a href="#u4E09_u3001_u5A92_u4F53_u67E5_u8BE2_u53EF_u68C0_u6D4B_u7684_u7279_u6027" class="headerlink" title="三、媒体查询可检测的特性"></a>三、媒体查询可检测的特性</h3><ul>
-<li>width：视口宽度</li>
-<li>height：视口高度</li>
-<li>device-width：渲染表面的宽度(对我们来说,就是设备屏幕的宽度)</li>
-<li>device-height：渲染表面的高度(对我们来说,就是设备屏幕的高度)</li>
-<li>orientation：检查设备处于横向还是纵向</li>
-<li>aspect-ratio：基于视口宽度和高度的宽高比。一个 16∶9 比例的显示屏可以这样定义 aspect-ratio: 16/9</li>
-<li>device-aspect-ratio：和 aspect-ratio 类似,基于设备渲染平面宽度和高度的宽高比</li>
-<li>color:每种颜色的位数。例如 min-color: 16 会检测设备是否拥有 16 位颜色。 </li>
-<li>color-index:设备的颜色索引表中的颜色数。值必须是非负整数。 </li>
-<li>monochrome:检测单色帧缓冲区中每像素所使用的位数。值必须是非负整数,如<br>monochrome: 2</li>
-<li>resolution:用来检测屏幕或打印机的分辨率,如 min-resolution: 300dpi。还可以接受每厘米像素点数的度量值,如 min-resolution: 118dpcm。</li>
-<li>scan:电视机的扫描方式,值可设为 progressive(逐行扫描)或 interlace(隔行扫描)。如 720p HD 电视(720p 的 p 即表明是逐行扫描)匹配 scan: progressive,而 1080i HD 电视(1080i 中的 i 表明是隔行扫描)匹配 scan: interlace。 </li>
-<li>grid:用来检测输出设备是网格设备还是位图设备。</li>
-</ul>
-<blockquote>
-<p><strong>除 scan 和 grid 之外,都可使用 min 和 max 前缀来创建一个查询范围，如min-width:200px、max-width:360px。</strong></p>
-</blockquote>
-<h3 id="u56DB_u3001_u5229_u7528viewport_u7981_u6B62_u7528_u6237_u7F29_u653E"><a href="#u56DB_u3001_u5229_u7528viewport_u7981_u6B62_u7528_u6237_u7F29_u653E" class="headerlink" title="四、利用viewport禁止用户缩放"></a>四、利用viewport禁止用户缩放</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta name="viewport" content="width=device-width,initial-scale=1.0" /&gt;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p><strong>meta标签表示：强制让文档的宽度与设备的宽度保持1:1，并且文档最大的宽度比例是1.0，且不允许用户点击屏幕放大浏览； 尤其要注意的是content里多个属性的设置一定要用分号+空格来隔开，如果不规范将不会起作用。</strong></p>
-</blockquote>
-<ul>
-<li><p>width viewport 宽度(数值/device-width)</p>
-</li>
-<li><p>height viewport 高度(数值/device-height)</p>
-</li>
-<li><p>initial-scale 初始缩放比例</p>
-</li>
-<li><p>maximum-scale 最大缩放比例</p>
-</li>
-<li><p>minimum-scale 最小缩放比例</p>
-</li>
-<li><p>user-scalable 是否允许用户缩放(yes/no)</p>
-</li>
-<li><p>minimal-ui iOS 7.1 beta 2 中新增属性（注意：iOS8 中已经删除），可以在页面加载时最小化上下状态栏。</p>
-</li>
-</ul>
-<blockquote>
-<p><strong>注意：关于viewport，还有一个很重要的概念是：iphone 的safari 浏览器完全没有滚动条，而且不是简单的“隐藏滚动条”， 是根本没有这个功能。iphone 的safari 浏览器实际上从一开始就完整显示了这个网页，然后用viewport 查看其中的一部分。 当你用手指拖动时，其实拖的不是页面，而是viewport。浏览器行为的改变不止是滚动条，交互事件也跟普通桌面不一样。</strong></p>
-</blockquote>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta content="yes" name="apple-mobile-web-app-capable" /&gt;</span><br><span class="line">&lt;meta content="black" name="apple-mobile-web-app-status-bar-style" /&gt;</span><br><span class="line">&lt;meta content="telephone=no" name="format-detection" /&gt;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>第一个meta标签是iphone设备中的safari私有meta标签，它表示：允许全屏模式浏览； </li>
-<li>第二个meta标签也是iphone的私有标签，它指定的iphone中safari顶端的状态条的样式； </li>
-<li>第三个meta标签表示：告诉设备忽略将页面中的数字识别为电话号码</li>
-</ul>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/">css</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
     <article id="post-深入理解Context" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -440,6 +249,267 @@
 <li>在一个apk中，Context的数量等于Activity个数+Service个数+1.</li>
 </ol>
 <p>本文转载自：<a href="http://blog.csdn.net/yuanzeyao/article/details/12955459" target="_blank" rel="external">http://blog.csdn.net/yuanzeyao/article/details/12955459</a></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Splash界面的实现过程" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/07/14/Splash界面的实现过程/" class="article-date">
+  	<time datetime="2015-07-14T08:04:51.000Z" itemprop="datePublished">2015-07-14</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/07/14/Splash界面的实现过程/">Splash界面的实现过程</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="u4E00-splash_u754C_u9762_u7684_u4F5C_u7528"><a href="#u4E00-splash_u754C_u9762_u7684_u4F5C_u7528" class="headerlink" title="一.splash界面的作用"></a>一.splash界面的作用</h2><ol>
+<li>用来展现产品的Logo</li>
+<li>应用程序初始化的操作</li>
+<li>检查应用程序的版本</li>
+<li>检查当前应用程序是否合法注册</li>
+</ol>
+<h2 id="u4E8C_u3001_u754C_u9762_u7684xml_u5B9A_u4E49"><a href="#u4E8C_u3001_u754C_u9762_u7684xml_u5B9A_u4E49" class="headerlink" title="二、界面的xml定义"></a>二、界面的xml定义</h2><p>写一个布局背景设置为产品的logo图片，再添加一个textview显示版本号。</p>
+<pre><code>&lt;TextView
+android:id=&quot;@+id/tv_splash_version&quot;
+android:layout_width=&quot;wrap_content&quot;
+android:layout_height=&quot;wrap_content&quot;
+android:textColor=&quot;#000000&quot;
+android:textStyle=&quot;bold&quot;
+android:shadowDx=&quot;1&quot;//阴影的偏移量
+android:shadowDy=&quot;1&quot;
+android:shadowRadius=&quot;0.2&quot;//阴影的半径
+android:shadowColor=&quot;#ffff00&quot;
+android:text=&quot;版本：1.0&quot;
+android:textSize=&quot;16sp&quot;
+android:layout_centerInParent=&quot;true&quot;/&gt;
+</code></pre><h2 id="u4E09_u3001_u52A8_u6001_u83B7_u53D6_u7248_u672C_u53F7_u7684_u65B9_u6CD5"><a href="#u4E09_u3001_u52A8_u6001_u83B7_u53D6_u7248_u672C_u53F7_u7684_u65B9_u6CD5" class="headerlink" title="三、动态获取版本号的方法"></a>三、动态获取版本号的方法</h2><pre><code class="java"><span class="function"><span class="keyword">public</span> String <span class="title">getAppVersion</span><span class="params">()</span></span>{
+    PackageManager pm = getPackageManager();
+    <span class="keyword">try</span> {
+        PackageInfo info = pm.getPackageInfo(getPackageName(), <span class="number">0</span>);
+        <span class="keyword">return</span> info.versionName;
+    } <span class="keyword">catch</span> (NameNotFoundException e) {
+        e.printStackTrace();
+        <span class="comment">//不可能发生；</span>
+        <span class="keyword">return</span> <span class="string">""</span>;
+    }
+}
+</code></pre>
+<h2 id="u56DB_u3001_u94FE_u63A5_u670D_u52A1_u5668_u83B7_u53D6_u66F4_u65B0_u4FE1_u606F"><a href="#u56DB_u3001_u94FE_u63A5_u670D_u52A1_u5668_u83B7_u53D6_u66F4_u65B0_u4FE1_u606F" class="headerlink" title="四、链接服务器获取更新信息"></a>四、链接服务器获取更新信息</h2><ol>
+<li><p>升级提醒的对话框</p>
+<pre><code class="java"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">showUpdateDialog</span><span class="params">()</span> </span>{
+AlertDialog.Builder build = <span class="keyword">new</span> Builder(<span class="keyword">this</span>);
+build.setTitle(<span class="string">"发现新版本"</span>);
+build.setMessage(description);
+build.setNegativeButton(<span class="string">"立刻升级"</span>, <span class="keyword">new</span> OnClickListener() {
+
+    <span class="meta">@Override</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(DialogInterface dialog, <span class="keyword">int</span> which)</span> </span>{
+        <span class="comment">//升级的代码；</span>
+    };
+});
+build.setPositiveButton(<span class="string">"下次再说"</span>, <span class="keyword">new</span> OnClickListener() {
+
+    <span class="meta">@Override</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(DialogInterface dialog, <span class="keyword">int</span> which)</span> </span>{
+        dialog.dismiss();
+ enterHome();
+
+    }
+});
+build.show();
+</code></pre>
+</li>
+<li><p>在子线程中请求服务器的代码  checkup（）方法</p>
+<p>~~~java</p>
+<pre><code>private void checkup() {
+ new Thread() {
+    public void run() {
+        Message msg = Message.obtain();
+        long startTime = System.currentTimeMillis();//启动该线程的系统时间
+        try {
+             //请求网络的代码
+            URL url = new URL(getString(R.string.serverurl));
+            HttpURLConnection conn = (HttpURLConnection) url
+                    .openConnection();
+            conn.setRequestMethod(&quot;GET&quot;);//请求方法
+            conn.setConnectTimeout(4000);//超时时间
+            int code = conn.getResponseCode();//返回码200请求成功
+            if (code == 200) {
+                InputStream is = conn.getInputStream();
+                String result = StreamTools.readFromStream(is);
+                Log.i(TAG, &quot;联网成功&quot; + result);
+                JSONObject obj = new JSONObject(result);//解析json字符串
+                String version = (String) obj.get(&quot;version&quot;);//版本信息
+                description = (String) obj.get(&quot;description&quot;);//描述信息
+                apkurl = (String) obj.get(&quot;apkurl&quot;);
+                if (getAppVersion().equals(version)) {
+                    msg.what = ENTER_HOME;
+                } else {
+                    msg.what = SHOW_UPDATE_DIALOG;
+
+                }
+            }
+        } catch (MalformedURLException e) {
+
+            e.printStackTrace();
+            msg.what = URL_ERROR;
+        } catch (IOException e) {
+            e.printStackTrace();
+            msg.what = NETWORK_ERROR;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            msg.what = JSON_ERROR;
+        } finally {
+            handler.sendMessage(msg);
+            long endTime = System.currentTimeMillis();//该线程执行完毕的时间
+            long dTime = endTime-startTime;//该线程的阻塞时间
+            if (dTime&lt;3000) {
+                try {
+                    Thread.sleep(3000-dTime);//若该线程的阻塞时间小于三秒继续睡眠到三秒
+                } catch (InterruptedException e) {                            
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}.start();
+
+}
+</code></pre><p>   //handler</p>
+<pre><code>private Handler handler = new Handler() {
+
+@Override
+public void handleMessage(Message msg) {
+    // TODO Auto-generated method stub
+    super.handleMessage(msg);
+    switch (msg.what) {
+    case SHOW_UPDATE_DIALOG:
+        showUpdateDialog();
+        break;
+    case ENTER_HOME:
+        Toast.makeText(getApplicationContext(), &quot;&quot;, 0).show();
+        enterhome();
+        break;
+    case URL_ERROR:
+        Toast.makeText(getApplicationContext(), &quot;URL_ERROR&quot;, 0).show();
+        enterhome();
+        break;
+    case NETWORK_ERROR:
+        Toast.makeText(getApplicationContext(), &quot;NETWORK_ERROR&quot;, 0).show();
+        enterhome();
+        break;
+
+    case JSON_ERROR:
+        Toast.makeText(getApplicationContext(), &quot;JSON_ERROR&quot;, 0).show();
+        enterhome();
+        break;
+    }
+}
+</code></pre></li>
+</ol>
+<pre><code>};
+</code></pre><pre><code>
+
+
+## 五、下载文件（使用Afinal框架）并调用**系统安装工具**安装APK  
+
+~~~java
+ if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                FinalHttp finalHttp = new FinalHttp();
+                    finalHttp.download(apkurl,Environment.getExternalStorageDirectory().getAbsolutePath()+
+                      &quot;/mobilesafe2.0.apk&quot; , new AjaxCallBack&lt;File&gt;() {
+
+                        @Override
+                        public void onLoading(long count, long current) {
+                            super.onLoading(count, current);
+                            tv_uapdate_info.setVisibility(View.VISIBLE);
+                            int progress =(int) (current*100/count);
+                                    tv_uapdate_info.setText(&quot;下载进度：&quot;+progress+&quot;%&quot;);
+                        }
+
+                        @Override
+                        public void onFailure(Throwable t, int errorNo,
+                                String strMsg) {
+                            t.printStackTrace();
+                            Toast.makeText(getApplicationContext(), &quot;下载失败&quot;, 0).show();
+                            enterhome();
+
+                            super.onFailure(t, errorNo, strMsg);
+                        }
+
+                        @Override
+                        public void onSuccess(File t) {
+
+                            super.onSuccess(t);
+                            installAPK(t);
+
+                        }
+
+                        private void installAPK(File t) {
+                            Intent intent = new Intent();//自动安装程序可调用该段代码
+                            intent.setAction(&quot;android.intent.action.VIEW&quot;);
+                            intent.addCategory(&quot;android.intent.category.DEFAULT&quot;);
+                            intent.setDataAndType(Uri.fromFile(t), &quot;application/vnd.android.package-archive&quot;);
+                            startActivity(intent);                        
+                        }
+
+                    });
+
+                }else{
+                    Toast.makeText(getApplicationContext(), &quot;请插入内存卡再试&quot;,0).show();
+                    return;
+
+                }
+</code></pre><blockquote>
+<p>其他：</p>
+<p>1、显示4.0的样式：方式是去掉功能清单里的Activity对应的android:theme；<br>  放到application里面；</p>
+<p>2、当splash页面弹出升级提示框过滤点击返回的是两种方式：</p>
+<p><em>builder.setCancelable(false);<br>  设置setOnCancelListener 当触屏的时候直接进入主页面</em>  </p>
+<p>对话框是挂载在Activity上面的,<strong>如果Activity不存在，对话框就不能被创建</strong>。<br>getApplicationContext();生命周期长，只要应用还存活它就存在；this 生命周期短，只要Activity不存在了，系统就会回收<br>其中：getBaseContext(),getApplication(),getApplicationContext(); 都不能放在AlertDialog做上下文；</p>
+</blockquote>
 
       
     </div>
@@ -758,6 +828,84 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class MyFragmentPagerAdapter2 extends FragmentStatePagerAdapter &#123;//&#35813;&#36866;&#37197;&#22120;&#21487;&#20197;&#21160;&#24577;&#38144;&#27585;&#10;&#9;private List&#60;Fragment&#62; fragList;&#10;&#9;private List&#60;String&#62; titleList;&#10;&#9;public MyFragmentPagerAdapter2(FragmentManager fm,List&#60;Fragment&#62; fragList,List&#60;String&#62; titleList) &#123;&#10;&#9;&#9;super(fm);&#10;&#9;&#9;this.fragList = fragList;&#10;&#9;&#9;this.titleList = titleList;&#10;&#9;&#125;&#10;&#9;&#10;&#10;&#9;@Override&#10;&#9;public Fragment getItem(int arg0) &#123;&#10;&#9;&#9;&#10;&#9;&#9;return fragList.get(arg0);&#10;&#9;&#125;&#10;&#9;&#10;&#9;@Override&#10;&#9;public CharSequence getPageTitle(int position) &#123;&#10;&#9;&#9;&#10;&#9;&#9;return titleList.get(position);&#10;&#9;&#125;&#10;&#10;&#9;@Override&#10;&#9;public int getCount() &#123;&#10;&#9;&#9;&#10;&#9;&#9;return fragList.size();&#10;&#9;&#125;&#10;&#9;&#10;&#9;@Override&#10;&#9;public Object instantiateItem(ViewGroup arg0, int arg1) &#123;&#10;&#9;&#9;&#10;&#9;&#9;return super.instantiateItem(arg0, arg1);&#10;&#9;&#125;&#10;&#9;@Override&#10;&#9;public void destroyItem(ViewGroup container, int position, Object object) &#123;&#10;&#9;&#9;&#10;&#9;&#9;super.destroyItem(container, position, object);&#10;&#9;&#125;&#10;&#10;&#125;</span><br></pre></td></tr></table></figure>
 <p>MainActivity里使用getSupportFragmentManager()该Activity必须继承FragmentActivity：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class MainActivity extends FragmentActivity implements OnPageChangeListener&#123;&#10;&#9;private List&#60;View&#62; viewList;&#10;&#9;private List&#60;String&#62; titleList;&#10;&#9;private ViewPager pager;&#10;&#9;private PagerTabStrip tab;//&#39030;&#37096;&#26631;&#39064;&#10;&#9;&#10;&#9;private List&#60;Fragment&#62; fragList;&#10;&#10;    @Override&#10;    protected void onCreate(Bundle savedInstanceState) &#123;&#10;        super.onCreate(savedInstanceState);&#10;        setContentView(R.layout.activity_main);&#10;        viewList = new ArrayList&#60;View&#62;();&#10;        titleList = new ArrayList&#60;String&#62;();&#10;        tab = (PagerTabStrip) findViewById(R.id.tab);&#10;        &#10;        View view1 = View.inflate(this,R.layout.view1,null);&#10;        View view2 = View.inflate(this,R.layout.view2,null);&#10;        View view3 = View.inflate(this,R.layout.view3,null);&#10;        View view4 = View.inflate(this,R.layout.view4,null);&#10;        &#10;        viewList.add(view1);&#10;        viewList.add(view2);&#10;        viewList.add(view3);&#10;        viewList.add(view4);&#10;        &#10;        fragList = new ArrayList&#60;Fragment&#62;();&#10;        fragList.add(new Fragment1());&#10;        fragList.add(new Fragment2());&#10;        fragList.add(new Fragment3());&#10;        fragList.add(new Fragment4());&#10;        &#10;       //&#20026;ViewPager&#39029;&#21345;&#35774;&#32622;&#26631;&#39064;&#10;        titleList.add(&#34;&#31532;&#19968;&#39029;&#34;);&#10;        titleList.add(&#34;&#31532;&#20108;&#39029;&#34;);&#10;        titleList.add(&#34;&#31532;&#19977;&#39029;&#34;);&#10;        titleList.add(&#34;&#31532;&#22235;&#39029;&#34;);&#10;        //&#20026;PagerTabStrip&#35774;&#32622;&#19968;&#20123;&#23646;&#24615;&#10;        tab.setBackgroundColor(Color.WHITE);&#10;        tab.setDrawFullUnderline(false);&#10;        tab.setTabIndicatorColor(Color.BLUE);&#10;        &#10;        pager = (ViewPager) findViewById(R.id.pager);&#10;        //MyPagerAdapter adapter = new MyPagerAdapter(viewList,titleList);&#10;        //MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragList, titleList);&#10;        /**&#10;         * &#20351;&#29992;getSupportFragmentManager()&#35813;Activity&#24517;&#39035;&#32487;&#25215;FragmentActivity&#10;         */&#10;        MyFragmentPagerAdapter2 adapter = new MyFragmentPagerAdapter2(getSupportFragmentManager(), fragList, titleList);&#10;        pager.setAdapter(adapter);&#10;        pager.setOnPageChangeListener(this);&#10;    &#125;&#10;&#10;&#9;@Override&#10;&#9;public void onPageScrollStateChanged(int arg0) &#123;&#10;&#9;&#9;&#9;&#9;&#10;&#9;&#125;&#10;&#10;&#9;@Override&#10;&#9;public void onPageScrolled(int arg0, float arg1, int arg2) &#123;&#10;&#9;&#9;&#9;&#9;&#10;&#9;&#125;&#10;&#10;&#9;@Override&#10;&#9;public void onPageSelected(int arg0) &#123;&#10;&#9;&#9;Toast.makeText(this,&#34;&#24403;&#21069;&#26159;&#31532;&#34;+(arg0+1)+&#34;&#20010;&#30028;&#38754;&#34;, 0).show();&#10;&#9;&#9;&#10;&#9;&#125;&#10;&#10;&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Android数据存储的方法（ROM、SD卡、SharedPreference）" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/02/14/Android数据存储的方法（ROM、SD卡、SharedPreference）/" class="article-date">
+  	<time datetime="2015-02-14T08:02:08.000Z" itemprop="datePublished">2015-02-14</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/14/Android数据存储的方法（ROM、SD卡、SharedPreference）/">Android数据存储的方法（ROM、SD卡、SharedPreference）</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="u4E00_u3001_u4FDD_u5B58_u6587_u4EF6_u5230_u624B_u673A_u5185_u5B58"><a href="#u4E00_u3001_u4FDD_u5B58_u6587_u4EF6_u5230_u624B_u673A_u5185_u5B58" class="headerlink" title="一、保存文件到手机内存"></a>一、保存文件到手机内存</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line">	 * 保存数据到手机rom的文件里面.</span><br><span class="line">	 * <span class="doctag">@param</span> context 应用程序的上下文 提供环境</span><br><span class="line">	 * <span class="doctag">@param</span> name 用户名</span><br><span class="line">	 * <span class="doctag">@param</span> password 密码</span><br><span class="line">	 * <span class="doctag">@throws</span> Exception</span><br><span class="line">	 */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">saveToRom</span><span class="params">(Context context, String name , String password)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">		<span class="comment">//File file = new File("/data/data/com.itheima.login/files/info.txt");</span></span><br><span class="line">		File file = <span class="keyword">new</span> File(context.getFilesDir(),<span class="string">"info.txt"</span>);<span class="comment">//该文件在data下的files文件夹下getCacheDir()在cache文件夹下 文件大小不要超过1Mb</span></span><br><span class="line">		FileOutputStream fos = <span class="keyword">new</span> FileOutputStream(file);</span><br><span class="line">		String txt = name+<span class="string">":"</span>+password;</span><br><span class="line">		fos.write(txt.getBytes());</span><br><span class="line">		fos.flush();</span><br><span class="line">		fos.close();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line">	 * 获取保存的数据</span><br><span class="line">	 * <span class="doctag">@param</span> context</span><br><span class="line">	 * <span class="doctag">@return</span></span><br><span class="line">	 */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Map&lt;String,String&gt; getUserInfo(Context context) &#123;</span><br><span class="line">		File file = <span class="keyword">new</span> File(context.getFilesDir(),<span class="string">"info.txt"</span>);</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			FileInputStream fis = <span class="keyword">new</span> FileInputStream(file);</span><br><span class="line">           <span class="comment">//也可直接读取文件String result = StreamTools.readFromStream(fis);</span></span><br><span class="line">			BufferedReader br = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(fis));</span><br><span class="line">			String str = br.readLine();</span><br><span class="line">			String[] infos = str.split(<span class="string">":"</span>);</span><br><span class="line">			Map&lt;String,String&gt; map = <span class="keyword">new</span> HashMap&lt;String, String&gt;();</span><br><span class="line">			map.put(<span class="string">"username"</span>, infos[<span class="number">0</span>]);</span><br><span class="line">			map.put(<span class="string">"password"</span>, infos[<span class="number">1</span>]);</span><br><span class="line">			<span class="keyword">return</span> map;</span><br><span class="line">		&#125; <span class="keyword">catch</span>(Exception e) &#123;</span><br><span class="line">			</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line"><span class="comment">//最后可以直接调用上面的方法读取信息</span></span><br><span class="line">Map&lt;String, String&gt; map = getUserInfo(<span class="keyword">this</span>);</span><br><span class="line">If(map!=<span class="keyword">null</span>)&#123;</span><br><span class="line">Textview.setText(map.get(“username”));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="u4E8C_u3001_u4FDD_u5B58_u6587_u4EF6_u5230SD_u5361"><a href="#u4E8C_u3001_u4FDD_u5B58_u6587_u4EF6_u5230SD_u5361" class="headerlink" title="二、保存文件到SD卡"></a>二、保存文件到SD卡</h3><p>获取手机sd空间的大小：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">File path = Environment.getExternalStorageDirectory();</span><br><span class="line">		StatFs stat = <span class="keyword">new</span> StatFs(path.getPath());</span><br><span class="line">		<span class="keyword">long</span> blockSize = stat.getBlockSize();</span><br><span class="line">		<span class="keyword">long</span> totalBlocks = stat.getBlockCount();</span><br><span class="line">		<span class="keyword">long</span> availableBlocks = stat.getAvailableBlocks();</span><br><span class="line">		<span class="keyword">long</span> totalSize = blockSize*totalBlocks;</span><br><span class="line">		<span class="keyword">long</span> availSize = blockSize * availableBlocks;</span><br><span class="line">		</span><br><span class="line">		String totalStr = Formatter.formatFileSize(<span class="keyword">this</span>,totalSize);</span><br><span class="line">		String availStr = Formatter.formatFileSize(<span class="keyword">this</span>, availSize);</span><br><span class="line">		tv.setText(<span class="string">"总空间"</span>+totalStr+<span class="string">"\n"</span>+<span class="string">"可用空间"</span>+availStr);</span><br></pre></td></tr></table></figure>
+<p>加入写外部存储的权限：</p>
+<p><strong>\<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission></strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">save</span><span class="params">(String name ,String password)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line"><span class="keyword">if</span> (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))&#123;</span><br><span class="line">File file = <span class="keyword">new</span> File(Environment.getExternalStorageDirectory(),<span class="string">"info.txt"</span>);</span><br><span class="line"><span class="comment">//也可直接写/sdcard/info.txt 先判断sd卡是否存在</span></span><br><span class="line">		FileOutputStream fos = <span class="keyword">new</span> FileOutputStream(file);</span><br><span class="line">		String txt = name+<span class="string">":"</span>+password;</span><br><span class="line">		fos.write(txt.getBytes());</span><br><span class="line">		fos.flush();</span><br><span class="line">		fos.close();</span><br><span class="line"><span class="comment">// 使用RandomAccessFile像文件追加内容FileOutputStream会把原有的文件内容清空</span></span><br><span class="line"><span class="comment">//RandomAccessFile raf = new RandomAccessFile(file,"rw");</span></span><br><span class="line"><span class="comment">//raf.seek(file.length());  将文件指针移动到最后</span></span><br><span class="line"><span class="comment">//raf.write(name.getBytes()+password.getBytes());</span></span><br><span class="line"><span class="comment">//raf.close();</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//读取文件 加入读取权限</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">read</span><span class="params">()</span></span>&#123;</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				<span class="keyword">if</span> (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))&#123;</span><br><span class="line">					File sdcardDir = Environment.getExternalStorageDirectory();</span><br><span class="line">					FileInputStream fis = <span class="keyword">new</span> FileInputStream(sdcardDir.getCanonicalPath() + <span class="string">"info.txt"</span>);</span><br><span class="line">					BufferedReader br = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(fis));</span><br><span class="line">					StringBuilder sb = <span class="keyword">new</span> StringBuilder(<span class="string">""</span>);</span><br><span class="line">					String line = <span class="keyword">null</span>;</span><br><span class="line">					<span class="keyword">while</span> ((line = br.readLine())!= <span class="keyword">null</span>)&#123;</span><br><span class="line">						sb.append(line);</span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">return</span> sb.toString();</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;  <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">				</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">		&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="u4E09_u3001Sharedpreferences_u7684_u4F7F_u7528"><a href="#u4E09_u3001Sharedpreferences_u7684_u4F7F_u7528" class="headerlink" title="三、Sharedpreferences的使用"></a>三、Sharedpreferences的使用</h3><blockquote>
+<p>SharedPreference是开发中常用的一种存储方式，主要存储一些系统不变的参数如是否是第一次进入应用程序等，通过键值对的方式进行存储</p>
+</blockquote>
+<p><strong>可以存储的类型：booleans, floats, ints, longs,strings.</strong></p>
+<ul>
+<li>getSharedPreferences() - 存储多个参数</li>
+<li>getPreferences() - 仅存储一个参数并且不需要指定名字（key）</li>
+</ul>
+<p><strong>写入的步骤：</strong></p>
+<ol>
+<li>SharedPreferences调用edit（）得到一个Editor对象</li>
+<li>使用 putBoolean() and putString()添加值</li>
+<li>提交事务完成存储</li>
+</ol>
+<p><strong>读取时：只需要调用SharedPreferences的getBoolean() and getString()</strong></p>
+<p>下面是示例代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class MySharedPreference &#123;&#10;&#9;private Context context;&#10;&#9;private SharedPreferences sp ;&#10;&#9;private Editor edit;&#10;&#9;public MySharedPreference(Context context)&#123;&#10;&#9;&#9;this.context = context;&#10;&#9;&#125;&#10;&#9;public boolean saveMessage(String name,String pwd)&#123;&#10;&#9;&#9;boolean flag = false;&#10;&#9;&#9; sp = context.getSharedPreferences(&#34;userInfo&#34;,Context.MODE_PRIVATE);&#10;         //MODE&#23450;&#20041;&#20102;&#35775;&#38382;&#30340;&#26435;&#38480;&#29616;&#22312;&#26159;&#26412;&#24212;&#29992;&#21487;&#20197;&#35775;&#38382;&#10;&#9;&#9;edit = sp.edit();&#10;&#9;&#9;edit.putString(&#34;name&#34;, name);&#10;&#9;&#9;edit.putString(&#34;pwd&#34;, pwd);&#10;&#9;&#9;flag = edit.commit();//&#25552;&#20132;&#20107;&#21153;&#23558;&#25968;&#25454;&#25345;&#20037;&#21270;&#21040;&#23384;&#20648;&#22120;&#20013;&#10;&#9;&#9;return flag;&#10;&#9;&#9;&#10;&#9;&#125;&#10;&#9;public Map&#60;String,Object&#62; getMessage()&#123;&#10;&#9;&#9;Map&#60;String,Object&#62; map = new HashMap&#60;String, Object&#62;();&#10;&#9;&#9;sp = context.getSharedPreferences(&#34;userInfo&#34;, Context.MODE_PRIVATE);&#10;&#9;&#9;String name = sp.getString(&#34;name&#34;, &#34;&#34;);&#10;&#9;&#9;String pwd = sp.getString(&#34;pwd&#34;, &#34;&#34;);&#10;&#9;&#9;map.put(&#34;name&#34;, name);&#10;&#9;&#9;map.put(&#34;pwd&#34;,pwd);&#10;&#9;&#9;return map;&#10;&#9;&#9;&#10;&#9;&#125;&#10;&#10;&#125;</span><br></pre></td></tr></table></figure>
       
     </div>
     
